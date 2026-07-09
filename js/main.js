@@ -98,6 +98,20 @@ document.addEventListener('DOMContentLoaded', () => {
     });
   }
 
+  // BFCache (Back-Forward Cache) Support for transition loader
+  window.addEventListener('pageshow', (event) => {
+    if (event.persisted) {
+      gsap.to(loader, {
+        opacity: 0,
+        duration: 0.5,
+        ease: 'power2.out',
+        onComplete: () => {
+          loader.style.display = 'none';
+        }
+      });
+    }
+  });
+
   // Smooth Page Transitions for Links
   const links = document.querySelectorAll('a:not([target="_blank"]):not([href^="#"]):not([href^="mailto"]):not([href^="tel"])');
   links.forEach(link => {

@@ -126,14 +126,27 @@
 
   <script>
     function goBack() {
-      const ref = document.referrer;
-      // If referrer exists, is same origin, and is not another 404 page, go back
-      if (ref && ref.indexOf(window.location.hostname) !== -1 && ref.indexOf('404.html') === -1) {
-        window.history.back();
-      } else {
-        // No valid history — go home
+      // history.length === 1 means this page is the very first (and only) entry —
+      // there is nothing to go back to, so redirect immediately.
+      if (history.length <= 1) {
         window.location.href = 'index.html';
+        return;
       }
+
+      // Attempt to navigate back. Set a safety net: if the page is still
+      // visible after 600 ms (history.back() had nowhere valid to go),
+      // fall back to the home page to avoid an infinite loader / stuck state.
+      const fallbackTimer = setTimeout(function () {
+        window.location.href = 'index.html';
+      }, 600);
+
+      // If history.back() actually navigates away, the pagehide event fires
+      // before the timer, so we cancel the fallback redirect.
+      window.addEventListener('pagehide', function () {
+        clearTimeout(fallbackTimer);
+      }, { once: true });
+
+      history.back();
     }
   </script>
 
