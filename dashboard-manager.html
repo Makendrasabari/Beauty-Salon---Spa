@@ -1,0 +1,1590 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <!-- Global Page Preloader -->
+  <script src="js/preloader.js"></script>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Salon Manager Portal - Stackly</title>
+  
+  <!-- Font Awesome -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  
+  <!-- CSS Stylesheets -->
+  <link rel="stylesheet" href="css/variables.css">
+  <link rel="stylesheet" href="css/dashboards.css">
+  
+  <style>
+    /* Manager specific overrides */
+
+    /* Profile Dropdown Card */
+    .db-user-profile {
+      position: relative;
+      cursor: pointer;
+    }
+
+    .profile-dropdown {
+      display: none;
+      position: absolute;
+      top: calc(100% + 12px);
+      right: 0;
+      width: 260px;
+      background: var(--bg-white);
+      border: 1px solid var(--border-gold);
+      border-radius: var(--border-radius-sm);
+      box-shadow: 0 12px 40px rgba(0,0,0,0.12);
+      z-index: 9999;
+      overflow: hidden;
+      animation: dropdownFade 0.2s ease;
+    }
+
+    .profile-dropdown.open {
+      display: block;
+    }
+
+    @keyframes dropdownFade {
+      from { opacity: 0; transform: translateY(-8px); }
+      to   { opacity: 1; transform: translateY(0); }
+    }
+
+    .profile-dropdown-header {
+      background: linear-gradient(135deg, var(--accent-gold-light), #f5efe4);
+      padding: 1.25rem 1.5rem;
+      border-bottom: 1px solid var(--border-gold);
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+    }
+
+    .profile-dropdown-avatar {
+      width: 46px;
+      height: 46px;
+      border-radius: 50%;
+      background: var(--accent-gold);
+      color: var(--bg-primary);
+      font-size: 1.2rem;
+      font-weight: 700;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+      border: 2px solid rgba(255,255,255,0.6);
+    }
+
+    .profile-dropdown-meta {
+      flex: 1;
+      min-width: 0;
+    }
+
+    .profile-dropdown-meta strong {
+      display: block;
+      font-size: 0.95rem;
+      color: var(--text-dark);
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+
+    .profile-dropdown-meta span {
+      font-size: 0.78rem;
+      color: var(--accent-gold);
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      font-weight: 600;
+    }
+
+    .profile-dropdown-body {
+      padding: 1rem 1.5rem;
+    }
+
+    .profile-dropdown-row {
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+      padding: 0.55rem 0;
+      border-bottom: 1px solid var(--border-light);
+      font-size: 0.88rem;
+      color: var(--text-muted);
+    }
+
+    .profile-dropdown-row:last-child {
+      border-bottom: none;
+    }
+
+    .profile-dropdown-row i {
+      color: var(--accent-gold);
+      width: 16px;
+      text-align: center;
+      flex-shrink: 0;
+    }
+
+    .profile-dropdown-row span {
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+
+    .manager-form {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 1.5rem;
+    }
+    
+    .form-group-full {
+      grid-column: span 2;
+    }
+    
+    .manager-form label {
+      font-size: 0.85rem;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      color: var(--accent-gold);
+      display: block;
+      margin-bottom: 0.5rem;
+      font-weight: 500;
+    }
+    
+    .manager-form input, .manager-form select, .manager-form textarea {
+      width: 100%;
+      border: 1px solid var(--border-gold);
+      padding: 0.75rem 1rem;
+      border-radius: var(--border-radius-sm);
+      font-size: 0.95rem;
+      background-color: var(--bg-primary);
+      color: var(--text-dark);
+      transition: border-color 0.3s ease;
+    }
+    
+    .manager-form input:focus, .manager-form select:focus, .manager-form textarea:focus {
+      border-color: var(--accent-gold);
+      outline: none;
+    }
+    
+    .action-btn {
+      padding: 0.4rem 0.8rem;
+      border-radius: var(--border-radius-sm);
+      font-size: 0.8rem;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      cursor: pointer;
+      margin-right: 5px;
+      display: inline-block;
+      transition: var(--transition-fast);
+    }
+    
+    .action-btn-approve {
+      background-color: var(--accent-gold-light);
+      color: var(--accent-gold-hover);
+      border: 1px solid var(--accent-gold);
+    }
+    
+    .action-btn-approve:hover {
+      background-color: var(--accent-gold);
+      color: var(--bg-primary);
+    }
+    
+    .action-btn-cancel {
+      background-color: #F8D7DA;
+      color: #721C24;
+      border: 1px solid #F5C6CB;
+    }
+    
+    .action-btn-cancel:hover {
+      background-color: #721C24;
+      color: #FFFFFF;
+    }
+
+    @media (max-width: 768px) {
+      .manager-form {
+        grid-template-columns: 1fr !important;
+        gap: 1rem !important;
+      }
+      .manager-form div[style*="grid-column"],
+      .manager-form .form-group-full {
+        grid-column: span 1 !important;
+      }
+    }
+  </style>
+  <script>
+    /* Stackly Toast Notification */
+    function showToast(message, type, duration) {
+      type = type || 'info';
+      duration = duration || 4000;
+      var existing = document.getElementById('stackly-toast');
+      if (existing) existing.remove();
+      var icons = { success:'fas fa-check-circle', error:'fas fa-times-circle', warning:'fas fa-exclamation-triangle', info:'fas fa-info-circle' };
+      var colors = { success:'#5a8a6a', error:'#c0392b', warning:'#b8860b', info:'#c9a84c' };
+      var icon = icons[type] || icons.info;
+      var color = colors[type] || colors.info;
+      var toast = document.createElement('div');
+      toast.id = 'stackly-toast';
+      toast.style.cssText = 'position:fixed;bottom:32px;right:32px;min-width:300px;max-width:420px;background:#fff;border-left:4px solid '+color+';border-radius:8px;box-shadow:0 8px 32px rgba(0,0,0,0.14);display:flex;align-items:flex-start;gap:14px;padding:16px 20px;z-index:99999;font-family:Jost,sans-serif;animation:toastSlideIn 0.35s cubic-bezier(0.25,0.46,0.45,0.94) forwards;';
+      toast.innerHTML = '<style>@keyframes toastSlideIn{from{opacity:0;transform:translateY(20px)}to{opacity:1;transform:translateY(0)}}@keyframes toastSlideOut{from{opacity:1;transform:translateY(0)}to{opacity:0;transform:translateY(20px)}}</style><i class="'+icon+'" style="color:'+color+';font-size:1.25rem;margin-top:2px;flex-shrink:0;"></i><span style="flex:1;font-size:0.9rem;color:#3a3a3a;line-height:1.5;">'+message+'</span><span onclick="this.closest('#stackly-toast').remove()" style="cursor:pointer;color:#aaa;font-size:1rem;flex-shrink:0;">&#x2715;</span>';
+      document.body.appendChild(toast);
+      setTimeout(function(){ if(toast.parentNode){ toast.style.animation='toastSlideOut 0.3s ease forwards'; setTimeout(function(){ toast.remove(); }, 300); } }, duration);
+    }
+  </script>
+</head>
+<body>
+
+  <div class="dashboard-container">
+    <!-- Sidebar -->
+    <aside class="db-sidebar" id="sidebar">
+      <div class="db-sidebar-header">
+        <a href="dashboard-manager.html" class="no-transition">
+          <img src="assets/Logo.webp" alt="Stackly Logo">
+        </a>
+        <div class="sidebar-close" onclick="toggleSidebar()">
+          <i class="fas fa-times"></i>
+        </div>
+      </div>
+      
+      <nav class="db-sidebar-menu">
+        <div class="db-menu-item">
+          <a href="#" class="db-menu-link active" onclick="switchTab('overview')">
+            <i class="fas fa-chart-line"></i> Dashboard
+          </a>
+        </div>
+        <div class="db-menu-item">
+          <a href="#" class="db-menu-link" onclick="switchTab('appointments')">
+            <i class="fas fa-calendar-check"></i> Appointments
+          </a>
+        </div>
+        <div class="db-menu-item">
+          <a href="#" class="db-menu-link" onclick="switchTab('services')">
+            <i class="fas fa-spa"></i> Services Menu
+          </a>
+        </div>
+        <div class="db-menu-item">
+          <a href="#" class="db-menu-link" onclick="switchTab('reports')">
+            <i class="fas fa-file-invoice-dollar"></i> Reports
+          </a>
+        </div>
+      </nav>
+      
+      <div class="db-sidebar-footer">
+        <a href="#" class="db-menu-link" onclick="handleLogout()" style="color: #7A5230;">
+          <i class="fas fa-sign-out-alt"></i> Logout
+        </a>
+      </div>
+    </aside>
+    
+    <!-- Main Content -->
+    <main class="db-main">
+      <!-- Header -->
+      <header class="db-header">
+        <div class="sidebar-toggle" onclick="toggleSidebar()">
+          <i class="fas fa-bars"></i>
+        </div>
+        
+        <div class="db-header-title">
+          <h2 id="panel-title">Dashboard Overview</h2>
+        </div>
+        
+        <div class="db-header-right">
+          <div class="db-notifications" onclick="window.location.href='404.html'" style="cursor: pointer;">
+            <i class="fas fa-bell"></i>
+          </div>
+          <div class="db-user-profile" id="profile-toggle" onclick="toggleProfileDropdown()">
+            <div class="db-user-avatar" id="mgr-avatar-initial">M</div>
+            <div class="db-user-info">
+              <span id="user-email-display">Manager</span>
+              <small>Salon Director</small>
+            </div>
+            <!-- Profile Dropdown Card -->
+            <div class="profile-dropdown" id="profile-dropdown">
+              <div class="profile-dropdown-header">
+                <div class="profile-dropdown-avatar" id="dropdown-avatar-initial">M</div>
+                <div class="profile-dropdown-meta">
+                  <strong id="dropdown-name">Manager</strong>
+                  <span id="dropdown-role">Salon Director</span>
+                </div>
+              </div>
+              <div class="profile-dropdown-body">
+                <div class="profile-dropdown-row">
+                  <i class="fas fa-envelope"></i>
+                  <span id="dropdown-email">manager@stackly.com</span>
+                </div>
+                <div class="profile-dropdown-row">
+                  <i class="fas fa-user"></i>
+                  <span id="dropdown-full-name">Manager</span>
+                </div>
+                <div class="profile-dropdown-row">
+                  <i class="fas fa-id-badge"></i>
+                  <span>Salon Manager</span>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </header>
+      
+      <div class="db-content">
+        
+        <!-- Tab 1: Overview Panel -->
+        <div class="db-tab-panel active" id="panel-overview">
+          <!-- Stats Grid -->
+          <div class="db-cards-grid">
+            <div class="db-card">
+              <div class="db-card-info">
+                <h3>Total Earnings</h3>
+                <div class="db-card-value" id="stat-earnings">$8,450</div>
+              </div>
+              <div class="db-card-icon"><i class="fas fa-wallet"></i></div>
+            </div>
+            
+            <div class="db-card">
+              <div class="db-card-info">
+                <h3>Appointments</h3>
+                <div class="db-card-value" id="stat-bookings">42</div>
+              </div>
+              <div class="db-card-icon"><i class="fas fa-calendar-check"></i></div>
+            </div>
+            
+            <div class="db-card">
+              <div class="db-card-info">
+                <h3>Active Stylists</h3>
+                <div class="db-card-value" id="stat-staff">3</div>
+              </div>
+              <div class="db-card-icon"><i class="fas fa-id-badge"></i></div>
+            </div>
+            
+            <div class="db-card">
+              <div class="db-card-info">
+                <h3>Total Clients</h3>
+                <div class="db-card-value" id="stat-clients">180</div>
+              </div>
+              <div class="db-card-icon"><i class="fas fa-user-friends"></i></div>
+            </div>
+          </div>
+          
+          <!-- Analytics Row -->
+          <div class="db-row">
+            <!-- Weekly Earnings -->
+            <div class="db-panel">
+              <div class="db-panel-header">
+                <h3 class="db-panel-title">Daily Bookings Revenue</h3>
+                <span style="color:var(--accent-gold); font-size:0.85rem; font-weight:600;">Current Month</span>
+              </div>
+              <div style="height: 280px; position: relative;">
+                <canvas id="overviewChart"></canvas>
+              </div>
+            </div>
+            
+            <!-- Treatment Breakdown -->
+            <div class="db-panel">
+              <div class="db-panel-header">
+                <h3 class="db-panel-title">Popular Services</h3>
+              </div>
+              <div style="height: 280px; position: relative;">
+                <canvas id="categoryChart"></canvas>
+              </div>
+            </div>
+          </div>
+          
+          <!-- Recent Registrations -->
+          <div class="db-panel">
+            <div class="db-panel-header">
+              <h3 class="db-panel-title">Pending Booking Approvals</h3>
+            </div>
+            <div class="db-table-wrapper">
+              <table class="db-table" id="recent-bookings-table">
+                <thead>
+                  <tr>
+                    <th>Customer</th>
+                    <th>Treatment</th>
+                    <th>Specialist</th>
+                    <th>Date & Time</th>
+                    <th>Price</th>
+                    <th>Status</th>
+                    <th>Action</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <!-- Filled via JS -->
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+        
+        <!-- Tab 2: Appointment Management -->
+        <div class="db-tab-panel" id="panel-appointments">
+          <div class="db-panel">
+            <div class="db-panel-header">
+              <h3 class="db-panel-title">All Reservations</h3>
+            </div>
+            <div class="db-table-wrapper">
+              <table class="db-table" id="all-bookings-table">
+                <thead>
+                  <tr>
+                    <th>Booking ID</th>
+                    <th>Client</th>
+                    <th>Treatment</th>
+                    <th>Date</th>
+                    <th>Time</th>
+                    <th>Specialist</th>
+                    <th>Cost</th>
+                    <th>Status</th>
+                    <th>Action</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <!-- Filled via JS -->
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+        
+        <!-- Tab 3: Customer Management -->
+        <div class="db-tab-panel" id="panel-customers">
+          <div class="db-panel">
+            <div class="db-panel-header">
+              <h3 class="db-panel-title">Registered Customer Database</h3>
+            </div>
+            <div class="db-table-wrapper">
+              <table class="db-table" id="customers-table">
+                <thead>
+                  <tr>
+                    <th>ID</th>
+                    <th>Email</th>
+                    <th>Account Tier</th>
+                    <th>Loyalty Points</th>
+                    <th>Join Date</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <!-- Filled via JS -->
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+        
+        <!-- Tab 4: Staff Management -->
+        <div class="db-tab-panel" id="panel-staff">
+          <div class="db-panel" style="margin-bottom: 2rem;">
+            <div class="db-panel-header">
+              <h3 class="db-panel-title">Add Stylist / Therapist</h3>
+            </div>
+            <form class="manager-form" onsubmit="addStaff(event)">
+              <div class="input-item">
+                <label>Staff Name</label>
+                <input type="text" id="staff-name" placeholder="e.g. Clara Oswald" required>
+              </div>
+              <div class="input-item">
+                <label>Specialization / Role</label>
+                <input type="text" id="staff-role" placeholder="e.g. Master Stylist" required>
+              </div>
+              <div class="form-group-full" style="text-align: right;">
+                <button type="submit" class="btn btn-primary" style="padding:0.75rem 2rem; font-size:0.75rem;">Add Specialist</button>
+              </div>
+            </form>
+          </div>
+          
+          <div class="db-panel">
+            <div class="db-panel-header">
+              <h3 class="db-panel-title">Senior Practitioner Roster</h3>
+            </div>
+            <div class="db-table-wrapper">
+              <table class="db-table" id="staff-table">
+                <thead>
+                  <tr>
+                    <th>Expert Name</th>
+                    <th>Role</th>
+                    <th>Availability</th>
+                    <th>Actions</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <!-- Filled via JS -->
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+        
+        <!-- Tab 5: Services Menu -->
+        <div class="db-tab-panel" id="panel-services">
+          <div class="db-panel" style="margin-bottom: 2rem;">
+            <div class="db-panel-header">
+              <h3 class="db-panel-title">Add New Service Card</h3>
+            </div>
+            <form class="manager-form" onsubmit="addService(event)">
+              <div class="input-item">
+                <label>Service Name</label>
+                <input type="text" id="srv-name" placeholder="e.g. Keratin Therapy" required>
+              </div>
+              <div class="input-item">
+                <label>Category</label>
+                <div class="custom-select-wrapper" id="custom-srv-category-wrapper">
+                  <div class="custom-select-trigger" onclick="toggleCustomSelect('custom-srv-category-wrapper')">
+                    <span>Skin Care</span>
+                    <i class="fas fa-chevron-down"></i>
+                  </div>
+                  <div class="custom-options-container">
+                    <div class="custom-option selected" data-value="Skin Care" onclick="selectCustomOption(this, 'custom-srv-category-wrapper', 'srv-category')">Skin Care</div>
+                    <div class="custom-option" data-value="Massage" onclick="selectCustomOption(this, 'custom-srv-category-wrapper', 'srv-category')">Massage</div>
+                    <div class="custom-option" data-value="Hair Styling" onclick="selectCustomOption(this, 'custom-srv-category-wrapper', 'srv-category')">Hair Styling</div>
+                  </div>
+                  <select id="srv-category" style="display: none;">
+                    <option value="Skin Care" selected>Skin Care</option>
+                    <option value="Massage">Massage</option>
+                    <option value="Hair Styling">Hair Styling</option>
+                  </select>
+                </div>
+              </div>
+              <div class="input-item">
+                <label>Cost Price ($)</label>
+                <input type="number" id="srv-price" placeholder="e.g. 140" required>
+              </div>
+              <div class="input-item">
+                <label>Duration Description</label>
+                <input type="text" id="srv-duration" placeholder="e.g. 1.5 Hours" required>
+              </div>
+              <div class="form-group-full" style="text-align: right;">
+                <button type="submit" class="btn btn-primary" style="padding:0.75rem 2rem; font-size:0.75rem;">Add Service</button>
+              </div>
+            </form>
+          </div>
+          
+          <div class="db-panel">
+            <div class="db-panel-header">
+              <h3 class="db-panel-title">Current Salon Menu</h3>
+            </div>
+            <div class="db-table-wrapper">
+              <table class="db-table" id="services-table">
+                <thead>
+                  <tr>
+                    <th>Service Name</th>
+                    <th>Category</th>
+                    <th>Cost</th>
+                    <th>Duration</th>
+                    <th>Actions</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <!-- Filled via JS -->
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+        
+        <!-- Tab 6: Revenue Analytics -->
+        <div class="db-tab-panel" id="panel-analytics">
+          <div class="db-row equal-split">
+            <div class="db-panel">
+              <div class="db-panel-header">
+                <h3 class="db-panel-title">Monthly Revenue Trend</h3>
+              </div>
+              <div style="height: 320px; position: relative;">
+                <canvas id="monthlyRevChart"></canvas>
+              </div>
+            </div>
+            
+            <div class="db-panel">
+              <div class="db-panel-header">
+                <h3 class="db-panel-title">Staff Booking Distribution</h3>
+              </div>
+              <div style="height: 320px; position: relative;">
+                <canvas id="staffDistChart"></canvas>
+              </div>
+            </div>
+          </div>
+        </div>
+        
+        <!-- Tab 7: Reports -->
+        <div class="db-tab-panel" id="panel-reports">
+          
+          <!-- Key Metrics Grid -->
+          <div class="db-cards-grid" style="margin-bottom: 2rem;">
+            <div class="db-card">
+              <div class="db-card-info">
+                <h3 style="font-size:0.85rem; color:var(--text-muted); font-weight:600; text-transform:uppercase; letter-spacing:1px; margin-bottom:0.25rem;">Projected Revenue</h3>
+                <div class="db-card-value" style="font-size:1.6rem; color:var(--text-dark);">$14,820</div>
+                <span style="color:#155724; font-size:0.75rem; font-weight:600;"><i class="fas fa-arrow-up"></i> +12.4% vs last month</span>
+              </div>
+              <div class="db-card-icon" style="color:var(--accent-gold); font-size:1.5rem;"><i class="fas fa-chart-line"></i></div>
+            </div>
+            
+            <div class="db-card">
+              <div class="db-card-info">
+                <h3 style="font-size:0.85rem; color:var(--text-muted); font-weight:600; text-transform:uppercase; letter-spacing:1px; margin-bottom:0.25rem;">Avg Ticket Size</h3>
+                <div class="db-card-value" style="font-size:1.6rem; color:var(--text-dark);">$115</div>
+                <span style="color:var(--text-muted); font-size:0.75rem;">Based on 42 bookings</span>
+              </div>
+              <div class="db-card-icon" style="color:var(--accent-gold); font-size:1.5rem;"><i class="fas fa-receipt"></i></div>
+            </div>
+            
+            <div class="db-card">
+              <div class="db-card-info">
+                <h3 style="font-size:0.85rem; color:var(--text-muted); font-weight:600; text-transform:uppercase; letter-spacing:1px; margin-bottom:0.25rem;">Top Category</h3>
+                <div class="db-card-value" style="font-size:1.6rem; color:var(--text-dark);">Skin Care</div>
+                <span style="color:var(--accent-gold); font-size:0.75rem; font-weight:600;">45% of total bookings</span>
+              </div>
+              <div class="db-card-icon" style="color:var(--accent-gold); font-size:1.5rem;"><i class="fas fa-spa"></i></div>
+            </div>
+
+            <div class="db-card">
+              <div class="db-card-info">
+                <h3 style="font-size:0.85rem; color:var(--text-muted); font-weight:600; text-transform:uppercase; letter-spacing:1px; margin-bottom:0.25rem;">Client Retention</h3>
+                <div class="db-card-value" style="font-size:1.6rem; color:var(--text-dark);">78%</div>
+                <span style="color:#155724; font-size:0.75rem; font-weight:600;"><i class="fas fa-arrow-up"></i> +5.2% vs last quarter</span>
+              </div>
+              <div class="db-card-icon" style="color:var(--accent-gold); font-size:1.5rem;"><i class="fas fa-user-check"></i></div>
+            </div>
+          </div>
+
+          <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 320px), 1fr)); gap: 2rem; margin-bottom: 2rem;">
+            <!-- Report Generator Form -->
+            <div class="db-panel" style="margin-bottom: 0;">
+              <div class="db-panel-header">
+                <h3 class="db-panel-title">Report Generator</h3>
+              </div>
+              <form class="manager-form" onsubmit="event.preventDefault(); simulateExport(document.getElementById('rep-type').value);">
+                <div class="input-item" style="margin-bottom: 1.25rem;">
+                  <label style="font-size:0.85rem; font-weight:600; color:var(--text-dark); display:block; margin-bottom:0.5rem;">Report Type</label>
+                  <div class="custom-select-wrapper" id="custom-rep-type-wrapper">
+                    <div class="custom-select-trigger" onclick="toggleCustomSelect('custom-rep-type-wrapper')">
+                      <span>Financial Revenue Summary</span>
+                      <i class="fas fa-chevron-down"></i>
+                    </div>
+                    <div class="custom-options-container">
+                      <div class="custom-option selected" data-value="Financial Revenue Summary" onclick="selectCustomOption(this, 'custom-rep-type-wrapper', 'rep-type')">Financial Revenue Summary</div>
+                      <div class="custom-option" data-value="Appointment Booking Logs" onclick="selectCustomOption(this, 'custom-rep-type-wrapper', 'rep-type')">Appointment Booking Logs</div>
+                      <div class="custom-option" data-value="Specialist Performance & Sales" onclick="selectCustomOption(this, 'custom-rep-type-wrapper', 'rep-type')">Specialist Performance & Sales</div>
+                      <div class="custom-option" data-value="Client Registrations & Loyalty" onclick="selectCustomOption(this, 'custom-rep-type-wrapper', 'rep-type')">Client Registrations & Loyalty</div>
+                    </div>
+                    <select id="rep-type" style="display: none;">
+                      <option value="Financial Revenue Summary">Financial Revenue Summary</option>
+                      <option value="Appointment Booking Logs">Appointment Booking Logs</option>
+                      <option value="Specialist Performance & Sales">Specialist Performance & Sales</option>
+                      <option value="Client Registrations & Loyalty">Client Registrations & Loyalty</option>
+                    </select>
+                  </div>
+                </div>
+                
+                <div style="margin-bottom: 1.25rem;">
+                  <label style="font-size:0.85rem; font-weight:600; color:var(--text-dark); display:block; margin-bottom:0.5rem;">Date Range</label>
+                  <div class="custom-select-wrapper" id="custom-rep-range-wrapper">
+                    <div class="custom-select-trigger" onclick="toggleCustomSelect('custom-rep-range-wrapper')">
+                      <span>This Month</span>
+                      <i class="fas fa-chevron-down"></i>
+                    </div>
+                    <div class="custom-options-container">
+                      <div class="custom-option" data-value="today" onclick="selectCustomOption(this, 'custom-rep-range-wrapper', 'rep-range')">Today</div>
+                      <div class="custom-option" data-value="week" onclick="selectCustomOption(this, 'custom-rep-range-wrapper', 'rep-range')">Last 7 Days</div>
+                      <div class="custom-option selected" data-value="month" onclick="selectCustomOption(this, 'custom-rep-range-wrapper', 'rep-range')">This Month</div>
+                      <div class="custom-option" data-value="quarter" onclick="selectCustomOption(this, 'custom-rep-range-wrapper', 'rep-range')">Last Quarter</div>
+                    </div>
+                    <select id="rep-range" style="display: none;">
+                      <option value="today">Today</option>
+                      <option value="week">Last 7 Days</option>
+                      <option value="month" selected>This Month</option>
+                      <option value="quarter">Last Quarter</option>
+                    </select>
+                  </div>
+                </div>
+                
+                <div class="form-group-full">
+                  <button type="submit" class="btn btn-primary" style="width:100%; padding: 0.85rem; display:flex; justify-content:center; align-items:center; gap:8px;"><i class="fas fa-file-download"></i> Generate Report</button>
+                </div>
+              </form>
+            </div>
+
+            <!-- Pre-compiled Sheets -->
+            <div class="db-panel" style="margin-bottom: 0;">
+              <div class="db-panel-header">
+                <h3 class="db-panel-title">Download Store Ledger Sheets</h3>
+              </div>
+              <p style="color:var(--text-muted); margin-bottom: 1.5rem; font-size:0.9rem; line-height:1.4;">Simulate exporting accounting balance statements or appointment logs in CSV / PDF format.</p>
+              <div style="display: flex; flex-direction: column; gap: 1rem;">
+                <button class="btn btn-primary" onclick="simulateExport('Financial Report')" style="width: 100%; justify-content: flex-start; gap: 10px; padding:0.75rem 1.25rem;"><i class="fas fa-file-pdf"></i> Export July Financials</button>
+                <button class="btn btn-secondary" onclick="simulateExport('Booking Logs')" style="width: 100%; justify-content: flex-start; gap: 10px; padding:0.75rem 1.25rem;"><i class="fas fa-file-excel"></i> Export Booking Ledger</button>
+              </div>
+            </div>
+          </div>
+
+          <!-- History Table -->
+          <div class="db-panel">
+            <div class="db-panel-header">
+              <h3 class="db-panel-title">Recent Export History</h3>
+            </div>
+            <div style="overflow-x: auto;">
+              <table style="width: 100%; border-collapse: collapse; text-align: left;">
+                <thead>
+                  <tr style="border-bottom: 1px solid var(--border-light); color: var(--text-muted); font-size: 0.85rem; text-transform: uppercase; letter-spacing: 0.5px;">
+                    <th style="padding: 1rem 0.5rem;">File Name</th>
+                    <th style="padding: 1rem 0.5rem;">Date Generated</th>
+                    <th style="padding: 1rem 0.5rem;">File Size</th>
+                    <th style="padding: 1rem 0.5rem;">Status</th>
+                    <th style="padding: 1rem 0.5rem; text-align: right;">Action</th>
+                  </tr>
+                </thead>
+                <tbody style="font-size: 0.95rem; color: var(--text-dark);">
+                  <tr style="border-bottom: 1px solid var(--border-light);">
+                    <td style="padding: 1rem 0.5rem;"><i class="fas fa-file-pdf" style="color:#dc3545; margin-right:8px;"></i> <strong>stackly_financial_report_june_2026.pdf</strong></td>
+                    <td style="padding: 1rem 0.5rem;">June 30, 2026 &bull; 18:45</td>
+                    <td style="padding: 1rem 0.5rem;">1.2 MB</td>
+                    <td style="padding: 1rem 0.5rem;"><span class="badge" style="background:#d4edda; color:#155724; padding:0.25rem 0.6rem; border-radius:4px; font-size:0.75rem; font-weight:600;">Completed</span></td>
+                    <td style="padding: 1rem 0.5rem; text-align: right;"><button class="action-btn action-btn-approve" onclick="window.location.href='404.html'" style="padding: 0.4rem 0.8rem; font-size: 0.8rem;">Download</button></td>
+                  </tr>
+                  <tr style="border-bottom: 1px solid var(--border-light);">
+                    <td style="padding: 1rem 0.5rem;"><i class="fas fa-file-excel" style="color:#28a745; margin-right:8px;"></i> <strong>booking_ledger_q2_2026.xlsx</strong></td>
+                    <td style="padding: 1rem 0.5rem;">June 15, 2026 &bull; 10:12</td>
+                    <td style="padding: 1rem 0.5rem;">450 KB</td>
+                    <td style="padding: 1rem 0.5rem;"><span class="badge" style="background:#d4edda; color:#155724; padding:0.25rem 0.6rem; border-radius:4px; font-size:0.75rem; font-weight:600;">Completed</span></td>
+                    <td style="padding: 1rem 0.5rem; text-align: right;"><button class="action-btn action-btn-approve" onclick="window.location.href='404.html'" style="padding: 0.4rem 0.8rem; font-size: 0.8rem;">Download</button></td>
+                  </tr>
+                  <tr>
+                    <td style="padding: 1rem 0.5rem;"><i class="fas fa-file-csv" style="color:#17a2b8; margin-right:8px;"></i> <strong>specialist_utilization_june.csv</strong></td>
+                    <td style="padding: 1rem 0.5rem;">June 10, 2026 &bull; 09:30</td>
+                    <td style="padding: 1rem 0.5rem;">85 KB</td>
+                    <td style="padding: 1rem 0.5rem;"><span class="badge" style="background:#d4edda; color:#155724; padding:0.25rem 0.6rem; border-radius:4px; font-size:0.75rem; font-weight:600;">Completed</span></td>
+                    <td style="padding: 1rem 0.5rem; text-align: right;"><button class="action-btn action-btn-approve" onclick="window.location.href='404.html'" style="padding: 0.4rem 0.8rem; font-size: 0.8rem;">Download</button></td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+
+        </div>
+        
+        <!-- Tab 8: Settings -->
+        <div class="db-tab-panel" id="panel-settings">
+          <div class="db-panel">
+            <div class="db-panel-header">
+              <h3 class="db-panel-title">Store Configuration</h3>
+            </div>
+            <form class="manager-form" onsubmit="saveSettings(event)">
+              <div class="input-item">
+                <label>Salon Operating Name</label>
+                <input type="text" id="set-name" value="Stackly Beauty Salon & Spa">
+              </div>
+              <div class="input-item">
+                <label>Salem Store Contact Phone</label>
+                <input type="text" id="set-phone" value="+91 427 9876543">
+              </div>
+              <div class="input-item">
+                <label>Start Business Hours</label>
+                <input type="time" id="set-open" value="09:00">
+              </div>
+              <div class="input-item">
+                <label>End Business Hours</label>
+                <input type="time" id="set-close" value="20:00">
+              </div>
+              <div class="form-group-full" style="text-align: right; margin-top:1.5rem;">
+                <button type="submit" class="btn btn-primary" style="padding:0.75rem 2rem; font-size:0.75rem;">Save Changes</button>
+              </div>
+            </form>
+          </div>
+        </div>
+        
+      </div>
+    </main>
+  </div>
+
+  <!-- Chart.js Core CDN -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/chart.js/3.9.1/chart.min.js"></script>
+  
+  <!-- GSAP -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
+  
+  <!-- Manager Dashboard Logic -->
+  <script>
+    // Verify authentication and roles
+    document.addEventListener('DOMContentLoaded', () => {
+      const user = JSON.parse(localStorage.getItem('stackly_currentUser'));
+      
+      // Auto-login fallback check
+      if (!user || user.role !== 'manager') {
+        showToast("Unauthorized access. Redirecting to login...", "error", 2000);
+        window.location.href = 'login.html';
+        return;
+      }
+      
+      const namePart = user.email.split('@')[0];
+      const displayName = namePart.charAt(0).toUpperCase() + namePart.slice(1);
+      document.getElementById('user-email-display').textContent = displayName;
+      document.getElementById('mgr-avatar-initial').textContent = namePart.charAt(0).toUpperCase();
+
+      // Populate dropdown card
+      document.getElementById('dropdown-avatar-initial').textContent = namePart.charAt(0).toUpperCase();
+      document.getElementById('dropdown-name').textContent = displayName;
+      document.getElementById('dropdown-full-name').textContent = displayName;
+      document.getElementById('dropdown-email').textContent = user.email;
+      document.getElementById('dropdown-role').textContent = 'Salon Director';
+      
+      // Seed Database
+      seedDatabase();
+      
+      // Populate lists
+      renderData();
+      
+      // Render Charts after layout calculation
+      setTimeout(initCharts, 150);
+    });
+
+    function toggleSidebar() {
+      document.getElementById('sidebar').classList.toggle('active');
+    }
+
+    // Custom Responsive Dropdown Logic
+    function toggleCustomSelect(wrapperId) {
+      const wrapper = document.getElementById(wrapperId);
+      if (!wrapper) return;
+      wrapper.classList.toggle('open');
+    }
+
+    function selectCustomOption(optionEl, wrapperId, nativeSelectId) {
+      const wrapper = document.getElementById(wrapperId);
+      if (!wrapper) return;
+      
+      const val = optionEl.getAttribute('data-value');
+      const text = optionEl.textContent;
+      
+      // Update display label
+      const labelEl = wrapper.querySelector('.custom-select-trigger span');
+      if (labelEl) labelEl.textContent = text;
+      
+      // Update native hidden select
+      const nativeSelect = document.getElementById(nativeSelectId);
+      if (nativeSelect) {
+        nativeSelect.value = val;
+        nativeSelect.dispatchEvent(new Event('change'));
+      }
+      
+      // Update selected class
+      wrapper.querySelectorAll('.custom-option').forEach(opt => {
+        opt.classList.remove('selected');
+      });
+      optionEl.classList.add('selected');
+      
+      wrapper.classList.remove('open');
+    }
+
+    // Close dropdowns when clicking outside
+    document.addEventListener('click', function(e) {
+      document.querySelectorAll('.custom-select-wrapper').forEach(wrapper => {
+        if (!wrapper.contains(e.target)) {
+          wrapper.classList.remove('open');
+        }
+      });
+    });
+
+    // SPA Tab Switching Logic
+    function switchTab(tabId) {
+      // Toggle nav links
+      document.querySelectorAll('.db-menu-link').forEach(link => {
+        link.classList.remove('active');
+      });
+      
+      // Highlight selected
+      event.currentTarget.classList.add('active');
+      
+      // Toggle panels
+      document.querySelectorAll('.db-tab-panel').forEach(panel => {
+        panel.classList.remove('active');
+      });
+      
+      const targetPanel = document.getElementById(`panel-${tabId}`);
+      targetPanel.classList.add('active');
+      
+      // Update header title
+      const titleMapping = {
+        'overview': 'Overview',
+        'appointments': 'Appointments',
+        'customers': 'Customers',
+        'staff': 'Staff Roster',
+        'services': 'Service Menu',
+        'analytics': 'Analytics',
+        'reports': 'Reports',
+        'settings': 'Settings'
+      };
+      document.getElementById('panel-title').textContent = titleMapping[tabId];
+      
+      // Close sidebar in mobile drawer view
+      document.getElementById('sidebar').classList.remove('active');
+    }
+
+    // Seeding dummy data for demonstration
+    function seedDatabase() {
+      if (!localStorage.getItem('stackly_staff')) {
+        const staff = [
+          { id: 'stf_1', name: 'Elena Rostova', role: 'Esthetician', active: true },
+          { id: 'stf_2', name: 'Sofia Varga', role: 'Aromatherapist', active: true },
+          { id: 'stf_3', name: 'Marcus Dupont', role: 'Stylist Master', active: true }
+        ];
+        localStorage.setItem('stackly_staff', JSON.stringify(staff));
+      }
+
+      if (!localStorage.getItem('stackly_services')) {
+        const services = [
+          { id: 'srv_1', name: 'Microdermabrasion Lift', category: 'Skin Care', price: 120, duration: '1 Hour' },
+          { id: 'srv_2', name: 'HydraGlow Intense Ritual', category: 'Skin Care', price: 150, duration: '1.25 Hours' },
+          { id: 'srv_3', name: 'Swedish Relaxation Massage', category: 'Massage', price: 110, duration: '1.5 Hours' },
+          { id: 'srv_4', name: 'Couture Cut & Blowout', category: 'Hair Styling', price: 85, duration: '1 Hour' }
+        ];
+        localStorage.setItem('stackly_services', JSON.stringify(services));
+      }
+
+      if (!localStorage.getItem('stackly_appointments')) {
+        const bookings = [
+          { id: 'bk_1', clientEmail: 'charlotte@stackly.com', serviceName: 'HydraGlow Intense Ritual', staffName: 'Elena Rostova', date: '2026-07-09', time: '10:00', price: 150, status: 'pending' },
+          { id: 'bk_2', clientEmail: 'victoria@stackly.com', serviceName: 'Swedish Relaxation Massage', staffName: 'Sofia Varga', date: '2026-07-10', time: '14:00', price: 110, status: 'approved' },
+          { id: 'bk_3', clientEmail: 'jane@stackly.com', serviceName: 'Couture Cut & Blowout', staffName: 'Marcus Dupont', date: '2026-07-11', time: '11:30', price: 85, status: 'approved' }
+        ];
+        localStorage.setItem('stackly_appointments', JSON.stringify(bookings));
+      }
+      
+      // Auto register default dummy clients if none exists
+      let users = JSON.parse(localStorage.getItem('stackly_users')) || [];
+      if (users.length === 0) {
+        users = [
+          { id: 'usr_mock_1', email: 'charlotte@stackly.com', role: 'client', points: 240, created: '2026-01-15' },
+          { id: 'usr_mock_2', email: 'victoria@stackly.com', role: 'client', points: 410, created: '2026-03-22' },
+          { id: 'usr_mock_3', email: 'jane@stackly.com', role: 'client', points: 90, created: '2026-06-01' }
+        ];
+        localStorage.setItem('stackly_users', JSON.stringify(users));
+      }
+    }
+
+    // Populate data tables and counters
+    function renderData() {
+      const bookings = JSON.parse(localStorage.getItem('stackly_appointments')) || [];
+      const staff = JSON.parse(localStorage.getItem('stackly_staff')) || [];
+      const services = JSON.parse(localStorage.getItem('stackly_services')) || [];
+      const users = JSON.parse(localStorage.getItem('stackly_users')) || [];
+      const clients = users.filter(u => u.role === 'client');
+
+      // Update counters
+      const totalEarnings = bookings.filter(b => b.status === 'approved').reduce((acc, curr) => acc + curr.price, 0);
+      document.getElementById('stat-earnings').textContent = `$${totalEarnings}`;
+      document.getElementById('stat-bookings').textContent = bookings.length;
+      document.getElementById('stat-staff').textContent = staff.length;
+      document.getElementById('stat-clients').textContent = clients.length;
+
+      // Pending bookings queue on Dashboard
+      const recentBody = document.querySelector('#recent-bookings-table tbody');
+      recentBody.innerHTML = '';
+      const pendingBookings = bookings.filter(b => b.status === 'pending');
+      
+      if (pendingBookings.length === 0) {
+        recentBody.innerHTML = '<tr><td colspan="7" style="text-align:center; color:var(--text-muted);">No pending bookings at the moment.</td></tr>';
+      } else {
+        pendingBookings.forEach(b => {
+          const tr = document.createElement('tr');
+          tr.innerHTML = `
+            <td><strong>${b.clientEmail.split('@')[0]}</strong><br><small style="color:var(--text-muted);">${b.clientEmail}</small></td>
+            <td>${b.serviceName}</td>
+            <td>${b.staffName}</td>
+            <td>${b.date} &bull; ${b.time}</td>
+            <td>$${b.price}</td>
+            <td><span class="badge badge-pending">Pending</span></td>
+            <td>
+              <button class="action-btn action-btn-approve" onclick="updateBookingStatus('${b.id}', 'approved')">Approve</button>
+              <button class="action-btn action-btn-cancel" onclick="updateBookingStatus('${b.id}', 'cancelled')">Deny</button>
+            </td>
+          `;
+          recentBody.appendChild(tr);
+        });
+      }
+
+      // All bookings table
+      const allBody = document.querySelector('#all-bookings-table tbody');
+      allBody.innerHTML = '';
+      if (bookings.length === 0) {
+        allBody.innerHTML = '<tr><td colspan="9" style="text-align:center; color:var(--text-muted);">No reservations recorded.</td></tr>';
+      } else {
+        bookings.forEach(b => {
+          const tr = document.createElement('tr');
+          const statusBadgeClass = `badge-${b.status}`;
+          tr.innerHTML = `
+            <td>#${b.id.substring(3, 8)}</td>
+            <td>${b.clientEmail}</td>
+            <td>${b.serviceName}</td>
+            <td>${b.date}</td>
+            <td>${b.time}</td>
+            <td>${b.staffName}</td>
+            <td>$${b.price}</td>
+            <td><span class="badge ${statusBadgeClass}">${b.status}</span></td>
+            <td>
+              ${b.status === 'pending' ? `
+                <button class="action-btn action-btn-approve" onclick="updateBookingStatus('${b.id}', 'approved')">Approve</button>
+                <button class="action-btn action-btn-cancel" onclick="updateBookingStatus('${b.id}', 'cancelled')">Cancel</button>
+              ` : `<small style="color:var(--text-muted);">Resolved</small>`}
+            </td>
+          `;
+          allBody.appendChild(tr);
+        });
+      }
+
+      // Customer directory table
+      const custBody = document.querySelector('#customers-table tbody');
+      custBody.innerHTML = '';
+      clients.forEach(c => {
+        const tier = c.points >= 400 ? 'Platinum Tier' : (c.points >= 200 ? 'Gold Tier' : 'Silver Lounge');
+        const tr = document.createElement('tr');
+        tr.innerHTML = `
+          <td>#${c.id.substring(4, 9)}</td>
+          <td><strong>${c.email}</strong></td>
+          <td><span style="color:var(--accent-gold); font-weight:600;">${tier}</span></td>
+          <td>${c.points} pts</td>
+          <td>${c.created ? c.created.split('T')[0] : '2026-07-08'}</td>
+        `;
+        custBody.appendChild(tr);
+      });
+
+      // Staff roster table
+      const staffBody = document.querySelector('#staff-table tbody');
+      staffBody.innerHTML = '';
+      staff.forEach(s => {
+        const tr = document.createElement('tr');
+        tr.innerHTML = `
+          <td><strong>${s.name}</strong></td>
+          <td>${s.role}</td>
+          <td><span style="color:#155724; font-weight:600;">Active duty</span></td>
+          <td><button class="action-btn action-btn-cancel" onclick="deleteStaff('${s.id}')">Delete</button></td>
+        `;
+        staffBody.appendChild(tr);
+      });
+
+      // Services menu table
+      const srvBody = document.querySelector('#services-table tbody');
+      srvBody.innerHTML = '';
+      services.forEach(s => {
+        const tr = document.createElement('tr');
+        tr.innerHTML = `
+          <td><strong>${s.name}</strong></td>
+          <td>${s.category}</td>
+          <td>$${s.price}</td>
+          <td>${s.duration}</td>
+          <td><button class="action-btn action-btn-cancel" onclick="deleteService('${s.id}')">Remove</button></td>
+        `;
+        srvBody.appendChild(tr);
+      });
+    }
+
+    // Approve / Reschedule booking
+    function updateBookingStatus(bookingId, status) {
+      const bookings = JSON.parse(localStorage.getItem('stackly_appointments')) || [];
+      const item = bookings.find(b => b.id === bookingId);
+      if (item) {
+        item.status = status;
+        
+        // Add points to user if approved
+        if (status === 'approved') {
+          const users = JSON.parse(localStorage.getItem('stackly_users')) || [];
+          const user = users.find(u => u.email.toLowerCase() === item.clientEmail.toLowerCase());
+          if (user) {
+            user.points = (user.points || 0) + 50; // earn 50 points per booking
+            localStorage.setItem('stackly_users', JSON.stringify(users));
+          }
+        }
+        
+        localStorage.setItem('stackly_appointments', JSON.stringify(bookings));
+        renderData();
+      }
+    }
+
+    // Add Stylist
+    function addStaff(e) {
+      e.preventDefault();
+      const name = document.getElementById('staff-name').value.trim();
+      const role = document.getElementById('staff-role').value.trim();
+      
+      const staff = JSON.parse(localStorage.getItem('stackly_staff')) || [];
+      const newStaff = { id: 'stf_' + Date.now(), name: name, role: role, active: true };
+      staff.push(newStaff);
+      
+      localStorage.setItem('stackly_staff', JSON.stringify(staff));
+      document.getElementById('staff-name').value = '';
+      document.getElementById('staff-role').value = '';
+      
+      renderData();
+    }
+
+    function deleteStaff(id) {
+      let staff = JSON.parse(localStorage.getItem('stackly_staff')) || [];
+      staff = staff.filter(s => s.id !== id);
+      localStorage.setItem('stackly_staff', JSON.stringify(staff));
+      renderData();
+    }
+
+    // Add Service Card
+    function addService(e) {
+      e.preventDefault();
+      const name = document.getElementById('srv-name').value.trim();
+      const category = document.getElementById('srv-category').value;
+      const price = parseFloat(document.getElementById('srv-price').value);
+      const duration = document.getElementById('srv-duration').value.trim();
+      
+      const services = JSON.parse(localStorage.getItem('stackly_services')) || [];
+      const newSrv = { id: 'srv_' + Date.now(), name: name, category: category, price: price, duration: duration };
+      services.push(newSrv);
+      
+      localStorage.setItem('stackly_services', JSON.stringify(services));
+      document.getElementById('srv-name').value = '';
+      document.getElementById('srv-price').value = '';
+      document.getElementById('srv-duration').value = '';
+      
+      renderData();
+    }
+
+    function deleteService(id) {
+      let services = JSON.parse(localStorage.getItem('stackly_services')) || [];
+      services = services.filter(s => s.id !== id);
+      localStorage.setItem('stackly_services', JSON.stringify(services));
+      renderData();
+    }
+
+    // Simulate Financial Reports Export
+    function simulateExport(reportName) {
+      showToast(`Ledger Export Triggered: CSV/PDF export of "${reportName}" has been simulated and saved to downloads successfully.`, "success");
+    }
+
+    // Save Settings
+    function saveSettings(e) {
+      e.preventDefault();
+      showToast("Salon store configuration settings saved successfully!", "success");
+    }
+
+    // Chart.js initialization
+    // Chart.js initialization with native canvas fallbacks
+    function initCharts() {
+      try {
+        if (typeof Chart !== 'undefined') {
+          // 1. Overview Daily Booking Revenue Line Chart
+          const ctx1 = document.getElementById('overviewChart').getContext('2d');
+          new Chart(ctx1, {
+            type: 'line',
+            data: {
+              labels: ['July 1', 'July 2', 'July 3', 'July 4', 'July 5', 'July 6', 'July 7'],
+              datasets: [{
+                label: 'Daily Revenue ($)',
+                data: [350, 480, 290, 720, 510, 850, 940],
+                borderColor: '#C5A880',
+                backgroundColor: 'rgba(197, 168, 128, 0.1)',
+                fill: true,
+                tension: 0.4,
+                borderWidth: 2
+              }]
+            },
+            options: {
+              responsive: true,
+              maintainAspectRatio: false,
+              plugins: { legend: { display: false } },
+              scales: {
+                y: { grid: { color: '#EADCD2' }, ticks: { color: '#6E685E' } },
+                x: { grid: { display: false }, ticks: { color: '#6E685E' } }
+              }
+            }
+          });
+
+          // 2. Popular Service Doughnut Chart
+          const ctx2 = document.getElementById('categoryChart').getContext('2d');
+          new Chart(ctx2, {
+            type: 'doughnut',
+            data: {
+              labels: ['Facials', 'Massages', 'Hair Cut', 'Nails'],
+              datasets: [{
+                data: [40, 30, 20, 10],
+                backgroundColor: ['#C5A880', '#EADCD2', '#2A2A2A', '#DCD0C0'],
+                borderColor: '#FFFFFF',
+                borderWidth: 2
+              }]
+            },
+            options: {
+              responsive: true,
+              maintainAspectRatio: false,
+              plugins: { legend: { position: 'bottom', labels: { boxWidth: 12 } } }
+            }
+          });
+
+          // 3. Analytics Monthly Revenue Bar Chart
+          const ctx3 = document.getElementById('monthlyRevChart').getContext('2d');
+          new Chart(ctx3, {
+            type: 'bar',
+            data: {
+              labels: ['Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul'],
+              datasets: [{
+                label: 'Revenue Growth',
+                data: [5400, 6800, 7100, 8900, 9400, 12500],
+                backgroundColor: '#C5A880',
+                borderRadius: 4
+              }]
+            },
+            options: {
+              responsive: true,
+              maintainAspectRatio: false,
+              plugins: { legend: { display: false } }
+            }
+          });
+
+          // 4. Staff Distribution Doughnut Chart
+          const ctx4 = document.getElementById('staffDistChart').getContext('2d');
+          new Chart(ctx4, {
+            type: 'pie',
+            data: {
+              labels: ['Elena Rostova', 'Sofia Varga', 'Marcus Dupont'],
+              datasets: [{
+                data: [15, 12, 10],
+                backgroundColor: ['#C5A880', '#EADCD2', '#2A2A2A']
+              }]
+            },
+            options: {
+              responsive: true,
+              maintainAspectRatio: false
+            }
+          });
+          return;
+        }
+      } catch (err) {
+        console.warn("Chart.js failed to initialize, falling back to native drawing.", err);
+      }
+
+      // Native Canvas Fallback Drawing
+      drawFallbackLineChart('overviewChart');
+      drawFallbackDoughnutChart('categoryChart');
+      drawFallbackBarChart('monthlyRevChart');
+      drawFallbackPieChart('staffDistChart');
+    }
+
+    function drawFallbackLineChart(canvasId) {
+      const canvas = document.getElementById(canvasId);
+      if (!canvas) return;
+      const dpr = window.devicePixelRatio || 1;
+      const rect = canvas.getBoundingClientRect();
+      canvas.width = rect.width * dpr;
+      canvas.height = rect.height * dpr;
+      const ctx = canvas.getContext('2d');
+      ctx.scale(dpr, dpr);
+      const width = rect.width;
+      const height = rect.height;
+      
+      ctx.clearRect(0, 0, width, height);
+      ctx.strokeStyle = '#EADCD2';
+      ctx.lineWidth = 1;
+      const paddingLeft = 45;
+      const paddingBottom = 30;
+      const paddingTop = 20;
+      const paddingRight = 20;
+      const chartWidth = width - paddingLeft - paddingRight;
+      const chartHeight = height - paddingTop - paddingBottom;
+      
+      const gridCount = 4;
+      for (let i = 0; i <= gridCount; i++) {
+        const y = paddingTop + (chartHeight * i) / gridCount;
+        ctx.beginPath();
+        ctx.moveTo(paddingLeft, y);
+        ctx.lineTo(width - paddingRight, y);
+        ctx.stroke();
+        
+        ctx.fillStyle = '#6E685E';
+        ctx.font = '10px Jost, sans-serif';
+        ctx.textAlign = 'right';
+        ctx.textBaseline = 'middle';
+        const val = Math.round(1000 - (1000 * i) / gridCount);
+        ctx.fillText('$' + val, paddingLeft - 8, y);
+      }
+      
+      const labels = ['Jul 1', 'Jul 2', 'Jul 3', 'Jul 4', 'Jul 5', 'Jul 6', 'Jul 7'];
+      const data = [350, 480, 290, 720, 510, 850, 940];
+      const maxVal = 1000;
+      
+      const points = data.map((val, index) => {
+        const x = paddingLeft + (chartWidth * index) / (labels.length - 1);
+        const y = paddingTop + chartHeight * (1 - val / maxVal);
+        return { x, y };
+      });
+      
+      const gradient = ctx.createLinearGradient(0, paddingTop, 0, height - paddingBottom);
+      gradient.addColorStop(0, 'rgba(197, 168, 128, 0.4)');
+      gradient.addColorStop(1, 'rgba(197, 168, 128, 0.0)');
+      ctx.fillStyle = gradient;
+      ctx.beginPath();
+      ctx.moveTo(points[0].x, height - paddingBottom);
+      points.forEach(p => ctx.lineTo(p.x, p.y));
+      ctx.lineTo(points[points.length - 1].x, height - paddingBottom);
+      ctx.closePath();
+      ctx.fill();
+      
+      ctx.strokeStyle = '#C5A880';
+      ctx.lineWidth = 3;
+      ctx.lineCap = 'round';
+      ctx.lineJoin = 'round';
+      ctx.beginPath();
+      ctx.moveTo(points[0].x, points[0].y);
+      for (let i = 1; i < points.length; i++) {
+        ctx.lineTo(points[i].x, points[i].y);
+      }
+      ctx.stroke();
+      
+      points.forEach((p, index) => {
+        ctx.fillStyle = '#FFFFFF';
+        ctx.strokeStyle = '#C5A880';
+        ctx.lineWidth = 2;
+        ctx.beginPath();
+        ctx.arc(p.x, p.y, 4, 0, 2 * Math.PI);
+        ctx.fill();
+        ctx.stroke();
+        
+        ctx.fillStyle = '#6E685E';
+        ctx.font = '10px Jost, sans-serif';
+        ctx.textAlign = 'center';
+        ctx.textBaseline = 'top';
+        ctx.fillText(labels[index], p.x, height - paddingBottom + 8);
+      });
+    }
+
+    function drawFallbackDoughnutChart(canvasId) {
+      const canvas = document.getElementById(canvasId);
+      if (!canvas) return;
+      const dpr = window.devicePixelRatio || 1;
+      const rect = canvas.getBoundingClientRect();
+      canvas.width = rect.width * dpr;
+      canvas.height = rect.height * dpr;
+      const ctx = canvas.getContext('2d');
+      ctx.scale(dpr, dpr);
+      const width = rect.width;
+      const height = rect.height;
+      
+      ctx.clearRect(0, 0, width, height);
+      const centerX = width / 2;
+      const centerY = height / 2 - 15;
+      const radius = Math.min(centerX, centerY) - 20;
+      
+      const data = [40, 30, 20, 10];
+      const colors = ['#C5A880', '#EADCD2', '#2A2A2A', '#DCD0C0'];
+      const labels = ['Facials', 'Massages', 'Hair Cut', 'Nails'];
+      const total = data.reduce((a, b) => a + b, 0);
+      
+      let startAngle = -Math.PI / 2;
+      data.forEach((val, idx) => {
+        const sliceAngle = (val / total) * 2 * Math.PI;
+        ctx.fillStyle = colors[idx];
+        ctx.beginPath();
+        ctx.moveTo(centerX, centerY);
+        ctx.arc(centerX, centerY, radius, startAngle, startAngle + sliceAngle);
+        ctx.closePath();
+        ctx.fill();
+        
+        ctx.strokeStyle = '#FFFFFF';
+        ctx.lineWidth = 1.5;
+        ctx.beginPath();
+        ctx.moveTo(centerX, centerY);
+        ctx.arc(centerX, centerY, radius, startAngle, startAngle + sliceAngle);
+        ctx.closePath();
+        ctx.stroke();
+        
+        startAngle += sliceAngle;
+      });
+      
+      ctx.fillStyle = '#FFFFFF';
+      ctx.beginPath();
+      ctx.arc(centerX, centerY, radius * 0.55, 0, 2 * Math.PI);
+      ctx.fill();
+      
+      const legendY = height - 20;
+      const boxSize = 8;
+      const spacing = 75;
+      const startX = centerX - (spacing * 1.5);
+      
+      labels.forEach((lbl, idx) => {
+        const x = startX + idx * spacing;
+        ctx.fillStyle = colors[idx];
+        ctx.fillRect(x, legendY, boxSize, boxSize);
+        ctx.fillStyle = '#6E685E';
+        ctx.font = '10px Jost, sans-serif';
+        ctx.textAlign = 'left';
+        ctx.textBaseline = 'middle';
+        ctx.fillText(lbl, x + boxSize + 6, legendY + boxSize / 2);
+      });
+    }
+
+    function drawFallbackBarChart(canvasId) {
+      const canvas = document.getElementById(canvasId);
+      if (!canvas) return;
+      const dpr = window.devicePixelRatio || 1;
+      const rect = canvas.getBoundingClientRect();
+      canvas.width = rect.width * dpr;
+      canvas.height = rect.height * dpr;
+      const ctx = canvas.getContext('2d');
+      ctx.scale(dpr, dpr);
+      const width = rect.width;
+      const height = rect.height;
+      
+      ctx.clearRect(0, 0, width, height);
+      const paddingLeft = 45;
+      const paddingBottom = 30;
+      const paddingTop = 20;
+      const paddingRight = 20;
+      const chartWidth = width - paddingLeft - paddingRight;
+      const chartHeight = height - paddingTop - paddingBottom;
+      
+      const labels = ['Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul'];
+      const data = [5400, 6800, 7100, 8900, 9400, 12500];
+      const maxVal = 15000;
+      
+      ctx.strokeStyle = '#EADCD2';
+      ctx.lineWidth = 1;
+      const gridCount = 5;
+      for (let i = 0; i <= gridCount; i++) {
+        const y = paddingTop + (chartHeight * i) / gridCount;
+        ctx.beginPath();
+        ctx.moveTo(paddingLeft, y);
+        ctx.lineTo(width - paddingRight, y);
+        ctx.stroke();
+        
+        ctx.fillStyle = '#6E685E';
+        ctx.font = '10px Jost, sans-serif';
+        ctx.textAlign = 'right';
+        ctx.textBaseline = 'middle';
+        const val = Math.round(maxVal - (maxVal * i) / gridCount);
+        ctx.fillText('$' + val, paddingLeft - 8, y);
+      }
+      
+      const barWidth = (chartWidth / labels.length) * 0.6;
+      const groupWidth = chartWidth / labels.length;
+      
+      data.forEach((val, index) => {
+        const barHeight = chartHeight * (val / maxVal);
+        const x = paddingLeft + (groupWidth * index) + (groupWidth - barWidth) / 2;
+        const y = height - paddingBottom - barHeight;
+        
+        ctx.fillStyle = '#C5A880';
+        const radius = 4;
+        ctx.beginPath();
+        ctx.moveTo(x, y + barHeight);
+        ctx.lineTo(x, y + radius);
+        ctx.quadraticCurveTo(x, y, x + radius, y);
+        ctx.lineTo(x + barWidth - radius, y);
+        ctx.quadraticCurveTo(x + barWidth, y, x + barWidth, y + radius);
+        ctx.lineTo(x + barWidth, y + barHeight);
+        ctx.closePath();
+        ctx.fill();
+        
+        ctx.fillStyle = '#6E685E';
+        ctx.font = '10px Jost, sans-serif';
+        ctx.textAlign = 'center';
+        ctx.textBaseline = 'top';
+        ctx.fillText(labels[index], x + barWidth / 2, height - paddingBottom + 8);
+      });
+    }
+
+    function drawFallbackPieChart(canvasId) {
+      const canvas = document.getElementById(canvasId);
+      if (!canvas) return;
+      const dpr = window.devicePixelRatio || 1;
+      const rect = canvas.getBoundingClientRect();
+      canvas.width = rect.width * dpr;
+      canvas.height = rect.height * dpr;
+      const ctx = canvas.getContext('2d');
+      ctx.scale(dpr, dpr);
+      const width = rect.width;
+      const height = rect.height;
+      
+      ctx.clearRect(0, 0, width, height);
+      const centerX = width / 2;
+      const centerY = height / 2 - 15;
+      const radius = Math.min(centerX, centerY) - 20;
+      
+      const data = [15, 12, 10];
+      const colors = ['#C5A880', '#EADCD2', '#2A2A2A'];
+      const labels = ['Elena R.', 'Sofia V.', 'Marcus D.'];
+      const total = data.reduce((a, b) => a + b, 0);
+      
+      let startAngle = -Math.PI / 2;
+      data.forEach((val, idx) => {
+        const sliceAngle = (val / total) * 2 * Math.PI;
+        ctx.fillStyle = colors[idx];
+        ctx.beginPath();
+        ctx.moveTo(centerX, centerY);
+        ctx.arc(centerX, centerY, radius, startAngle, startAngle + sliceAngle);
+        ctx.closePath();
+        ctx.fill();
+        
+        ctx.strokeStyle = '#FFFFFF';
+        ctx.lineWidth = 1.5;
+        ctx.beginPath();
+        ctx.moveTo(centerX, centerY);
+        ctx.arc(centerX, centerY, radius, startAngle, startAngle + sliceAngle);
+        ctx.closePath();
+        ctx.stroke();
+        
+        startAngle += sliceAngle;
+      });
+      
+      const legendY = height - 20;
+      const boxSize = 8;
+      const spacing = 75;
+      const startX = centerX - (spacing * 1.2);
+      
+      labels.forEach((lbl, idx) => {
+        const x = startX + idx * spacing;
+        ctx.fillStyle = colors[idx];
+        ctx.fillRect(x, legendY, boxSize, boxSize);
+        ctx.fillStyle = '#6E685E';
+        ctx.font = '10px Jost, sans-serif';
+        ctx.textAlign = 'left';
+        ctx.textBaseline = 'middle';
+        ctx.fillText(lbl, x + boxSize + 6, legendY + boxSize / 2);
+      });
+    }
+
+    // Setup ResizeObserver for responsive fallback charts redraws
+    try {
+      if (typeof ResizeObserver !== 'undefined') {
+        const observer = new ResizeObserver(() => {
+          if (typeof Chart === 'undefined') {
+            drawFallbackLineChart('overviewChart');
+            drawFallbackDoughnutChart('categoryChart');
+            drawFallbackBarChart('monthlyRevChart');
+            drawFallbackPieChart('staffDistChart');
+          }
+        });
+        ['overviewChart', 'categoryChart', 'monthlyRevChart', 'staffDistChart'].forEach(id => {
+          const el = document.getElementById(id);
+          if (el && el.parentElement) {
+            observer.observe(el.parentElement);
+          }
+        });
+      }
+    } catch (e) {
+      console.warn("ResizeObserver not supported.", e);
+    }
+
+    window.addEventListener('resize', () => {
+      if (typeof Chart === 'undefined') {
+        drawFallbackLineChart('overviewChart');
+        drawFallbackDoughnutChart('categoryChart');
+        drawFallbackBarChart('monthlyRevChart');
+        drawFallbackPieChart('staffDistChart');
+      }
+    });
+
+    // Logout
+    function handleLogout() {
+      localStorage.removeItem('stackly_currentUser');
+      window.location.href = 'login.html';
+    }
+  </script>
+  <script>
+    function toggleProfileDropdown() {
+      const dd = document.getElementById('profile-dropdown');
+      dd.classList.toggle('open');
+    }
+
+    // Close dropdown when clicking outside
+    document.addEventListener('click', function(e) {
+      const toggle = document.getElementById('profile-toggle');
+      const dd = document.getElementById('profile-dropdown');
+      if (dd && toggle && !toggle.contains(e.target)) {
+        dd.classList.remove('open');
+      }
+    });
+  </script>
+</html>

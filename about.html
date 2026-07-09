@@ -1,0 +1,599 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <!-- Global Page Preloader -->
+  <script src="js/preloader.js"></script>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>About Us - Stackly Premium Beauty Salon & Spa</title>
+  <meta name="description" content="Learn about Stackly's philosophy, historical milestones, core luxury values, and our expert wellness practitioners in Salem.">
+  
+  <!-- Font Awesome -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  
+  <!-- CSS Stylesheets -->
+  <link rel="stylesheet" href="css/variables.css">
+  <link rel="stylesheet" href="css/main.css">
+  
+  <style>
+    /* About Page Specific Styles */
+    
+    /* Inner Hero */
+    .about-hero {
+      height: 60vh;
+      background: linear-gradient(rgba(42, 42, 42, 0.5), rgba(42, 42, 42, 0.5)), url('assets/hero_bg1.webp') no-repeat center center/cover;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      text-align: center;
+      color: #FFFFFF;
+    }
+    
+    .about-hero-content h1 {
+      font-size: 4rem;
+      font-weight: 300;
+      margin-bottom: 1rem;
+    }
+    
+    .about-breadcrumbs {
+      font-size: 0.9rem;
+      letter-spacing: 2px;
+      text-transform: uppercase;
+      color: var(--accent-gold);
+    }
+    
+    /* Our Story Section */
+    .story-layout {
+      display: grid;
+      grid-template-columns: 1.2fr 1fr;
+      gap: 5rem;
+      align-items: center;
+    }
+    
+    .story-content h2 {
+      font-size: 2.8rem;
+      margin-bottom: 1.5rem;
+    }
+    
+    .story-highlight {
+      font-size: 1.15rem;
+      color: var(--accent-gold);
+      margin-bottom: 1.5rem;
+      font-style: italic;
+    }
+    
+    .story-text {
+      color: var(--text-muted);
+      margin-bottom: 1.5rem;
+    }
+    
+    .story-img-wrapper {
+      position: relative;
+      border: 1px solid var(--border-gold);
+      padding: 1rem;
+      border-radius: var(--border-radius-sm);
+    }
+    
+    .story-img-wrapper img {
+      border-radius: var(--border-radius-sm);
+      width: 100%;
+    }
+    
+    /* Core Values Grid */
+    .values-grid {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 2rem;
+    }
+    
+    .value-card {
+      background-color: var(--bg-white);
+      border: 1px solid var(--border-light);
+      padding: 3rem 2rem;
+      text-align: center;
+      border-radius: var(--border-radius-sm);
+      box-shadow: var(--shadow-soft);
+      transition: var(--transition-smooth);
+    }
+    
+    .value-card:hover {
+      border-color: var(--accent-gold);
+      transform: translateY(-8px);
+      box-shadow: var(--shadow-medium);
+    }
+    
+    .value-icon {
+      font-size: 2.5rem;
+      color: var(--accent-gold);
+      margin-bottom: 1.5rem;
+      transition: transform 0.4s ease;
+    }
+    
+    .value-card:hover .value-icon {
+      transform: rotateY(180deg);
+    }
+    
+    .value-title {
+      font-size: 1.4rem;
+      margin-bottom: 1rem;
+      color: var(--text-dark);
+    }
+    
+    .value-desc {
+      font-size: 0.9rem;
+      color: var(--text-muted);
+      line-height: 1.5;
+    }
+    
+    /* Timeline / Milestones */
+    .timeline-container {
+      position: relative;
+      max-width: 900px;
+      margin: 0 auto;
+    }
+    
+    .timeline-container::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 1px;
+      height: 100%;
+      background-color: var(--border-gold);
+    }
+    
+    .timeline-item {
+      position: relative;
+      margin-bottom: 4rem;
+      width: 50%;
+      padding-right: 3rem;
+      box-sizing: border-box;
+    }
+    
+    .timeline-item:nth-child(even) {
+      left: 50%;
+      padding-right: 0;
+      padding-left: 3rem;
+    }
+    
+    .timeline-dot {
+      position: absolute;
+      top: 5px;
+      right: -8px;
+      width: 16px;
+      height: 16px;
+      border-radius: 50%;
+      background-color: var(--accent-gold);
+      border: 3px solid var(--bg-primary);
+      z-index: 2;
+    }
+    
+    .timeline-item:nth-child(even) .timeline-dot {
+      left: -8px;
+      right: auto;
+    }
+    
+    .timeline-date {
+      font-size: 1.8rem;
+      font-family: var(--font-heading);
+      color: var(--accent-gold);
+      margin-bottom: 0.5rem;
+      font-weight: 600;
+    }
+    
+    .timeline-content-card {
+      background-color: var(--bg-white);
+      border: 1px solid var(--border-light);
+      padding: 2rem;
+      border-radius: var(--border-radius-sm);
+      box-shadow: var(--shadow-soft);
+    }
+    
+    .timeline-content-card h3 {
+      font-size: 1.3rem;
+      margin-bottom: 0.75rem;
+    }
+    
+    .timeline-content-card p {
+      font-size: 0.9rem;
+      color: var(--text-muted);
+    }
+    
+    /* Team Section Grid */
+    .team-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 2.5rem;
+    }
+    
+    .team-card {
+      background-color: var(--bg-white);
+      border: 1px solid var(--border-light);
+      border-radius: var(--border-radius-sm);
+      overflow: hidden;
+      box-shadow: var(--shadow-soft);
+      transition: var(--transition-smooth);
+      text-align: center;
+    }
+    
+    .team-card:hover {
+      box-shadow: var(--shadow-medium);
+      transform: translateY(-8px);
+      border-color: var(--accent-gold);
+    }
+    
+    .team-img-wrapper {
+      height: 320px;
+      overflow: hidden;
+    }
+    
+    .team-img-wrapper img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      transition: transform 0.5s ease;
+    }
+    
+    .team-card:hover .team-img-wrapper img {
+      transform: scale(1.05);
+    }
+    
+    .team-info {
+      padding: 2rem 1.5rem;
+    }
+    
+    .team-name {
+      font-size: 1.4rem;
+      margin-bottom: 0.3rem;
+    }
+    
+    .team-role {
+      font-size: 0.85rem;
+      text-transform: uppercase;
+      letter-spacing: 2px;
+      color: var(--accent-gold);
+      font-weight: 500;
+      margin-bottom: 1rem;
+      display: block;
+    }
+    
+    .team-bio {
+      font-size: 0.9rem;
+      color: var(--text-muted);
+      margin-bottom: 1rem;
+    }
+    
+    /* Responsiveness */
+    @media (max-width: 1024px) {
+      .values-grid {
+        grid-template-columns: repeat(2, 1fr);
+      }
+      .team-grid {
+        grid-template-columns: repeat(2, 1fr);
+      }
+    }
+    
+    @media (max-width: 768px) {
+      .story-layout {
+        grid-template-columns: 1fr;
+        gap: 3rem;
+      }
+      .story-content {
+        text-align: center;
+      }
+      .story-content .section-subtitle {
+        text-align: center;
+        display: block;
+        margin: 0 auto 0.5rem;
+      }
+      .story-content h2 {
+        font-size: 2.2rem;
+      }
+      .timeline-container::before {
+        left: 20px;
+      }
+      .timeline-item {
+        width: 100%;
+        padding-left: 3rem;
+        padding-right: 0;
+        margin-bottom: 3rem;
+      }
+      .timeline-item:nth-child(even) {
+        left: 0;
+      }
+      .timeline-dot {
+        left: 12px;
+        right: auto;
+      }
+      .timeline-item:nth-child(even) .timeline-dot {
+        left: 12px;
+      }
+    }
+    
+    @media (max-width: 480px) {
+      .values-grid, .team-grid {
+        grid-template-columns: 1fr;
+      }
+      .about-hero-content h1 {
+        font-size: 2.4rem;
+      }
+      .story-content h2 {
+        font-size: 1.8rem;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Premium Header & Navbar -->
+  <header>
+    <div class="container navbar-container">
+      <a href="index.html" class="logo">
+        <img src="assets/Logo.webp" alt="Stackly Logo">
+      </a>
+      
+      <div class="hamburger">
+        <span></span>
+        <span></span>
+        <span></span>
+      </div>
+      
+      <nav class="nav-menu">
+        <li class="nav-item"><a href="index.html" class="nav-link">Home</a></li>
+        <li class="nav-item"><a href="about.html" class="nav-link">About</a></li>
+        <li class="nav-item"><a href="services.html" class="nav-link">Services</a></li>
+        <li class="nav-item"><a href="gallery.html" class="nav-link">Gallery</a></li>
+        <li class="nav-item"><a href="contact.html" class="nav-link">Contact</a></li>
+        <div class="nav-cta">
+          <a href="login.html" class="btn btn-primary" style="padding: 0.75rem 1.5rem; font-size: 0.75rem;">Login</a>
+        </div>
+      </nav>
+    </div>
+  </header>
+
+  <!-- Section 1: About Hero Banner -->
+  <section class="about-hero">
+    <div class="about-hero-content reveal-fade">
+      <h1>Our Sanctuary</h1>
+      <div class="about-breadcrumbs">
+        About Us
+      </div>
+    </div>
+  </section>
+
+  <!-- Section 2: Our Story -->
+  <section class="section">
+    <div class="container">
+      <div class="story-layout">
+        <div class="story-content reveal-up">
+          <span class="section-subtitle">The Journey</span>
+          <h2>A Heritage of Organic Wellness</h2>
+          <p class="story-highlight">“We set out to create more than just a salon; we crafted a holistic wellness ecosystem.”</p>
+          <p class="story-text">Founded by styling director Marcus Dupont and skincare specialist Elena Rostova, Stackly was born from a desire to harmonize advanced cosmetic techniques with restorative organic treatments. We observed how traditional beauty services prioritized quick results at the cost of long-term skin and hair health.</p>
+          <p class="story-text">By handpicking raw active botanicals, employing highly certified massage clinicians, and designing a quiet, sound-insulated resort aesthetic, we provide a true oasis. At Stackly, every guest receives a customized, detailed skin or hair audit to ensure absolute accuracy and safety.</p>
+        </div>
+        <div class="story-img-wrapper scale-in">
+          <img src="assets/about_intro.webp" alt="Stackly Story Room">
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Section 3: Core Values Grid -->
+  <section class="section section-dark">
+    <div class="container">
+      <div class="section-title-wrapper reveal-up">
+        <span class="section-subtitle">What Guides Us</span>
+        <h2 class="section-title">Our Luxury Core Pillars</h2>
+      </div>
+      
+      <div class="values-grid">
+        <!-- Value 1 -->
+        <div class="value-card reveal-up">
+          <div class="value-icon"><i class="fas fa-gem"></i></div>
+          <h3 class="value-title">Bespoke Luxury</h3>
+          <p class="value-desc">No templates or generic plans. We calibrate every temperature, aroma, and product dose for you.</p>
+        </div>
+        
+        <!-- Value 2 -->
+        <div class="value-card reveal-up">
+          <div class="value-icon"><i class="fas fa-leaf"></i></div>
+          <h3 class="value-title">Organic Active</h3>
+          <p class="value-desc">We utilize biodynamic oils and plant-based formulas free from synthetic chemicals or silicones.</p>
+        </div>
+        
+        <!-- Value 3 -->
+        <div class="value-card reveal-up">
+          <div class="value-icon"><i class="fas fa-user-tie"></i></div>
+          <h3 class="value-title">Certified Expertise</h3>
+          <p class="value-desc">Our specialists undergo extensive ongoing training in international styling and clinical wellness.</p>
+        </div>
+        
+        <!-- Value 4 -->
+        <div class="value-card reveal-up">
+          <div class="value-icon"><i class="fas fa-spa"></i></div>
+          <h3 class="value-title">Pure Tranquility</h3>
+          <p class="value-desc">Enjoy sound-masked lounges, herbal refreshments, and heated ergonomic therapy tables.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Section 4: Interactive Chronological Timeline -->
+  <section class="section">
+    <div class="container">
+      <div class="section-title-wrapper reveal-up">
+        <span class="section-subtitle">Our Growth</span>
+        <h2 class="section-title">Milestones & History</h2>
+      </div>
+      
+      <div class="timeline-container">
+        <!-- Year 2014 -->
+        <div class="timeline-item reveal-up">
+          <div class="timeline-dot"></div>
+          <div class="timeline-date">2014</div>
+          <div class="timeline-content-card">
+            <h3>The Founding</h3>
+            <p>Stackly opens its doors in Salem with 4 treatment rooms and 5 master practitioners, pioneering holistic face mapping.</p>
+          </div>
+        </div>
+        
+        <!-- Year 2017 -->
+        <div class="timeline-item reveal-up">
+          <div class="timeline-dot"></div>
+          <div class="timeline-date">2017</div>
+          <div class="timeline-content-card">
+            <h3>Elite Hair Expansion</h3>
+            <p>We launch the Couture Hair Color Wing, introducing ammonia-free French Balayage treatments to southern India.</p>
+          </div>
+        </div>
+        
+        <!-- Year 2020 -->
+        <div class="timeline-item reveal-up">
+          <div class="timeline-dot"></div>
+          <div class="timeline-date">2020</div>
+          <div class="timeline-content-card">
+            <h3>Wellness Sanctuary Design</h3>
+            <p>Renovated the entire space to feature soundproof walls, hot volcanic stones, and active aromatherapy filtration.</p>
+          </div>
+        </div>
+        
+        <!-- Year 2023 -->
+        <div class="timeline-item reveal-up">
+          <div class="timeline-dot"></div>
+          <div class="timeline-date">2023</div>
+          <div class="timeline-content-card">
+            <h3>Stackly Academy Launch</h3>
+            <p>Established our training school to certify regional beauty practitioners in organic product chemistry.</p>
+          </div>
+        </div>
+        
+        <!-- Year 2026 -->
+        <div class="timeline-item reveal-up">
+          <div class="timeline-dot"></div>
+          <div class="timeline-date">2026</div>
+          <div class="timeline-content-card">
+            <h3>Digital Guest Lounge</h3>
+            <p>Deploying interactive client portals and personalized wellness logs for a seamless modern booking experience.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Section 5: Extended Team Section -->
+  <section class="section section-dark">
+    <div class="container">
+      <div class="section-title-wrapper reveal-up">
+        <span class="section-subtitle">Our Artists</span>
+        <h2 class="section-title">Specialist Team Members</h2>
+      </div>
+      
+      <div class="team-grid">
+        <!-- Team 1 -->
+        <div class="team-card reveal-up">
+          <div class="team-img-wrapper">
+            <img src="assets/expert_1.webp" alt="Elena Rostova">
+          </div>
+          <div class="team-info">
+            <h3 class="team-name">Elena Rostova</h3>
+            <span class="team-role">Founder & Lead Esthetician</span>
+            <p class="team-bio">15+ years experience in clinical skin diagnostics and micro-rejuvenation therapies.</p>
+          </div>
+        </div>
+        
+        <!-- Team 2 -->
+        <div class="team-card reveal-up">
+          <div class="team-img-wrapper">
+            <img src="assets/expert_2.webp" alt="Sofia Varga">
+          </div>
+          <div class="team-info">
+            <h3 class="team-name">Sofia Varga</h3>
+            <span class="team-role">Head of Massage Therapy</span>
+            <p class="team-bio">Certified massage specialist in Himalayan Salt Stone and Ayurvedic body alignment.</p>
+          </div>
+        </div>
+        
+        <!-- Team 3 -->
+        <div class="team-card reveal-up">
+          <div class="team-img-wrapper">
+            <img src="assets/expert_3.webp" alt="Marcus Dupont">
+          </div>
+          <div class="team-info">
+            <h3 class="team-name">Marcus Dupont</h3>
+            <span class="team-role">Co-Founder & Styling Director</span>
+            <p class="team-bio">Award-winning global stylist expert in couture hair blowouts and color balayage.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Premium Footer -->
+  <footer>
+    <div class="container footer-grid">
+      <div class="footer-col">
+        <div class="footer-logo">
+          <img src="assets/Logo.webp" alt="Stackly Logo">
+        </div>
+        <p>Stackly offers premium international beauty styling, skincare, and restorative massage wellness services in a luxurious sanctuary.</p>
+        <div class="footer-socials">
+          <a href="404.html" class="social-icon"><i class="fab fa-instagram"></i></a>
+          <a href="404.html" class="social-icon"><i class="fab fa-facebook-f"></i></a>
+          <a href="404.html" class="social-icon"><i class="fab fa-pinterest-p"></i></a>
+          <a href="404.html" class="social-icon"><i class="fab fa-twitter"></i></a>
+        </div>
+      </div>
+      
+      <div class="footer-col">
+        <h4>Quick Links</h4>
+        <ul class="footer-links">
+          <li><a href="index.html">Home</a></li>
+          <li><a href="about.html">About Us</a></li>
+          <li><a href="services.html">Services</a></li>
+          <li><a href="gallery.html">Gallery</a></li>
+          <li><a href="contact.html">Contact Us</a></li>
+        </ul>
+      </div>
+      
+      <div class="footer-col">
+        <h4>Our Services</h4>
+        <ul class="footer-links">
+          <li><a href="404.html">Skincare Facials</a></li>
+          <li><a href="404.html">Body Massages</a></li>
+          <li><a href="404.html">Couture Hair Cuts</a></li>
+          <li><a href="404.html">Nail Care & Art</a></li>
+          <li><a href="404.html">Bridal Beauty Prep</a></li>
+        </ul>
+      </div>
+      
+      <div class="footer-col">
+        <h4>Stackly Salem</h4>
+        <p><i class="fas fa-map-marker-alt" style="color:var(--accent-gold); margin-right:8px;"></i> 12/B Luxury Plaza, Main Road, Salem, India</p>
+        <p><i class="fas fa-phone-alt" style="color:var(--accent-gold); margin-right:8px;"></i> +91 427 9876543</p>
+        <div class="footer-hours" style="margin-top: 1.5rem; border-top: 1px solid var(--border-light); padding-top: 1.5rem;">
+          <h5 style="color: var(--text-dark); font-size: 0.95rem; margin-bottom: 0.75rem; text-transform: uppercase; letter-spacing: 1px; font-family: var(--font-heading);">Opening Hours</h5>
+          <p style="margin-bottom: 0.5rem; font-size: 0.9rem;"><i class="far fa-clock" style="color: var(--accent-gold); margin-right: 8px;"></i> Mon - Fri: 9:00 AM - 8:00 PM</p>
+          <p style="margin-bottom: 0.5rem; font-size: 0.9rem;"><i class="far fa-clock" style="color: var(--accent-gold); margin-right: 8px;"></i> Sat - Sun: 9:00 AM - 9:00 PM</p>
+        </div>
+        <div class="footer-transit" style="margin-top: 1rem;">
+          <p style="font-size: 0.85rem; color: var(--text-muted); line-height: 1.4;"><i class="fas fa-parking" style="color: var(--accent-gold); margin-right: 8px;"></i> Valet parking available at entrance.</p>
+        </div>
+      </div>
+    </div>
+    
+    <div class="container footer-bottom">
+      <p>&copy; 2026 Stackly Beauty Salon & Spa. Powered by Stackly. All rights reserved.</p>
+      <p>Terms of Service &bull; Privacy Policy</p>
+    </div>
+  </footer>
+
+  <!-- GSAP Core & Plugins -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/ScrollTrigger.min.js"></script>
+  
+  <!-- Main Script -->
+  <script src="js/main.js"></script>
+</body>
+</html>

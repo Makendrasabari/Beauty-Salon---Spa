@@ -1,0 +1,569 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <!-- Global Page Preloader -->
+  <script src="js/preloader.js"></script>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Contact Us - Stackly Premium Beauty Salon & Spa</title>
+  <meta name="description" content="Get in touch with Stackly. Book your appointment, consult our experts, or view our location and working hours in Salem.">
+  
+  <!-- Font Awesome -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  
+  <!-- CSS Stylesheets -->
+  <link rel="stylesheet" href="css/variables.css">
+  <link rel="stylesheet" href="css/main.css">
+  
+  <style>
+    /* Contact Page Specific Styles */
+    
+    /* Inner Hero */
+    .contact-hero {
+      height: 60vh;
+      background: linear-gradient(rgba(42, 42, 42, 0.5), rgba(42, 42, 42, 0.5)), url('assets/hero_bg2.webp') no-repeat center center/cover;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      text-align: center;
+      color: #FFFFFF;
+    }
+    
+    .contact-hero-content h1 {
+      font-size: 4rem;
+      font-weight: 300;
+      margin-bottom: 1rem;
+    }
+    
+    .contact-breadcrumbs {
+      font-size: 0.9rem;
+      letter-spacing: 2px;
+      text-transform: uppercase;
+      color: var(--accent-gold);
+    }
+    
+    /* Contact Info Cards */
+    .info-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 2.5rem;
+    }
+    
+    .info-card {
+      background-color: var(--bg-white);
+      border: 1px solid var(--border-light);
+      border-radius: var(--border-radius-sm);
+      padding: 3.5rem 2rem;
+      text-align: center;
+      box-shadow: var(--shadow-soft);
+      transition: var(--transition-smooth);
+    }
+    
+    .info-card:hover {
+      transform: translateY(-8px);
+      border-color: var(--accent-gold);
+      box-shadow: var(--shadow-medium);
+    }
+    
+    .info-icon {
+      font-size: 2rem;
+      color: var(--accent-gold);
+      margin-bottom: 1.5rem;
+    }
+    
+    .info-title {
+      font-size: 1.4rem;
+      margin-bottom: 1rem;
+      color: var(--text-dark);
+    }
+    
+    .info-text {
+      color: var(--text-muted);
+      font-size: 0.95rem;
+      line-height: 1.6;
+    }
+    
+    /* Premium Form Section */
+    .contact-form-section {
+      background-color: var(--bg-secondary);
+      border-top: 1px solid var(--border-light);
+      border-bottom: 1px solid var(--border-light);
+    }
+    
+    .form-layout {
+      max-width: 800px;
+      margin: 0 auto;
+      background-color: var(--bg-white);
+      border: 1px solid var(--border-gold);
+      border-radius: var(--border-radius-sm);
+      padding: 4rem;
+      box-shadow: var(--shadow-medium);
+    }
+    
+    .form-title-wrapper {
+      text-align: center;
+      margin-bottom: 3rem;
+    }
+    
+    .form-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 2rem;
+      margin-bottom: 2rem;
+    }
+    
+    .input-group {
+      position: relative;
+    }
+    
+    .input-group.full-width {
+      grid-column: span 2;
+    }
+    
+    .form-control {
+      width: 100%;
+      padding: 1rem 0;
+      border-bottom: 1px solid var(--border-gold);
+      font-size: 1rem;
+      background: transparent;
+      color: var(--text-dark);
+      transition: border-color 0.3s ease;
+    }
+    
+    .form-control:focus {
+      border-bottom-color: var(--accent-gold);
+    }
+    
+    .form-label {
+      position: absolute;
+      top: 1rem;
+      left: 0;
+      font-size: 0.95rem;
+      color: var(--text-muted);
+      pointer-events: none;
+      transition: all 0.3s ease;
+    }
+    
+    /* Floating label effect */
+    .form-control:focus ~ .form-label,
+    .form-control:not(:placeholder-shown) ~ .form-label {
+      top: -12px;
+      font-size: 0.75rem;
+      color: var(--accent-gold);
+      letter-spacing: 1px;
+      text-transform: uppercase;
+    }
+    
+    textarea.form-control {
+      height: 120px;
+      resize: none;
+    }
+    
+    .alert-success {
+      background-color: var(--accent-gold-light);
+      border: 1px solid var(--accent-gold);
+      color: var(--accent-gold-hover);
+      padding: 1rem;
+      border-radius: var(--border-radius-sm);
+      margin-bottom: 2rem;
+      display: none;
+      text-align: center;
+      font-weight: 500;
+    }
+    
+    /* Full Width Map */
+    .map-section {
+      padding: 0;
+      height: 500px;
+      position: relative;
+      border-bottom: 1px solid var(--border-light);
+    }
+    
+    .map-section iframe {
+      width: 100%;
+      height: 100%;
+      border: none;
+      filter: grayscale(1) sepia(0.1) contrast(1.05);
+    }
+    
+    /* FAQ Accordion */
+    .faq-container {
+      max-width: 800px;
+      margin: 0 auto;
+    }
+    
+    .faq-item {
+      border-bottom: 1px solid var(--border-light);
+      padding: 1.5rem 0;
+    }
+    
+    .faq-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      cursor: pointer;
+      user-select: none;
+    }
+    
+    .faq-question {
+      font-size: 1.25rem;
+      font-family: var(--font-heading);
+      color: var(--text-dark);
+      transition: var(--transition-fast);
+    }
+    
+    .faq-item:hover .faq-question {
+      color: var(--accent-gold);
+    }
+    
+    .faq-toggle-icon {
+      font-size: 0.95rem;
+      color: var(--text-muted);
+      transition: transform 0.4s ease;
+    }
+    
+    .faq-answer {
+      height: 0;
+      overflow: hidden;
+      opacity: 0;
+      color: var(--text-muted);
+      font-size: 0.95rem;
+      line-height: 1.6;
+      margin-top: 0;
+      transition: all 0.4s ease-out;
+    }
+    
+    .faq-item.active .faq-answer {
+      height: auto;
+      opacity: 1;
+      margin-top: 1rem;
+    }
+    
+    .faq-item.active .faq-toggle-icon {
+      transform: rotate(180deg);
+      color: var(--accent-gold);
+    }
+    
+    /* Responsiveness */
+    @media (max-width: 1024px) {
+      .info-grid {
+        grid-template-columns: 1fr;
+        gap: 2rem;
+      }
+      .form-layout {
+        padding: 3rem 2rem;
+      }
+    }
+    
+    @media (max-width: 768px) {
+      .form-grid {
+        grid-template-columns: 1fr;
+      }
+      .input-group.full-width {
+        grid-column: span 1;
+      }
+      .map-section {
+        height: 350px;
+        margin: 0 1.5rem;
+        border-radius: var(--border-radius-md);
+        overflow: hidden;
+        border: 1px solid var(--border-gold);
+      }
+    }
+    
+    @media (max-width: 480px) {
+      .contact-hero-content h1 {
+        font-size: 2.4rem;
+      }
+      .map-section {
+        height: 280px;
+        margin: 0 1rem;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Premium Header & Navbar -->
+  <header>
+    <div class="container navbar-container">
+      <a href="index.html" class="logo">
+        <img src="assets/Logo.webp" alt="Stackly Logo">
+      </a>
+      
+      <div class="hamburger">
+        <span></span>
+        <span></span>
+        <span></span>
+      </div>
+      
+      <nav class="nav-menu">
+        <li class="nav-item"><a href="index.html" class="nav-link">Home</a></li>
+        <li class="nav-item"><a href="about.html" class="nav-link">About</a></li>
+        <li class="nav-item"><a href="services.html" class="nav-link">Services</a></li>
+        <li class="nav-item"><a href="gallery.html" class="nav-link">Gallery</a></li>
+        <li class="nav-item"><a href="contact.html" class="nav-link">Contact</a></li>
+        <div class="nav-cta">
+          <a href="login.html" class="btn btn-primary" style="padding: 0.75rem 1.5rem; font-size: 0.75rem;">Login</a>
+        </div>
+      </nav>
+    </div>
+  </header>
+
+  <!-- Section 1: Contact Hero Banner -->
+  <section class="contact-hero">
+    <div class="contact-hero-content reveal-fade">
+      <h1>Contact Details</h1>
+      <div class="contact-breadcrumbs">
+        Contact Us
+      </div>
+    </div>
+  </section>
+
+  <!-- Section 2: Contact Info Cards -->
+  <section class="section">
+    <div class="container">
+      <div class="info-grid">
+        <!-- Card 1 -->
+        <div class="info-card reveal-up">
+          <div class="info-icon"><i class="fas fa-phone-volume"></i></div>
+          <h3 class="info-title">Phone & Email</h3>
+          <p class="info-text">
+            Front Desk: +91 427 9876543<br>
+            Hotline: +91 427 1234567<br>
+            bookings@stacklysalon.com
+          </p>
+        </div>
+        
+        <!-- Card 2 -->
+        <div class="info-card reveal-up">
+          <div class="info-icon"><i class="fas fa-map-marked-alt"></i></div>
+          <h3 class="info-title">Salon Location</h3>
+          <p class="info-text">
+            12/B Luxury Plaza, Main Road,<br>
+            Salem, Tamil Nadu 636004,<br>
+            India
+          </p>
+        </div>
+        
+        <!-- Card 3 -->
+        <div class="info-card reveal-up">
+          <div class="info-icon"><i class="fas fa-clock"></i></div>
+          <h3 class="info-title">Opening Hours</h3>
+          <p class="info-text">
+            Monday - Saturday: 09:00 AM - 08:00 PM<br>
+            Sunday: 10:00 AM - 06:00 PM<br>
+            *Holidays: Check calendar
+          </p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Section 3: Premium Form Section -->
+  <section class="section contact-form-section">
+    <div class="container">
+      <div class="form-layout reveal-up">
+        <div class="form-title-wrapper" style="text-align: center; margin-bottom: 2.5rem;">
+          <span class="section-subtitle">Reach Out</span>
+          <h2 style="font-size: 2.3rem;">Send Us A Message</h2>
+          <p style="color:var(--text-muted); margin-top:5px;">We will reply to your inquiry within 24 business hours.</p>
+        </div>
+        
+        <div class="alert-success" id="success-alert">
+          Message sent successfully! Our reception team will call/email you shortly.
+        </div>
+        
+        <form id="contactForm" onsubmit="submitForm(event)">
+          <div class="form-grid">
+            <div class="input-group">
+              <input type="text" class="form-control" id="name" placeholder=" " required>
+              <label class="form-label" for="name">Your Full Name</label>
+            </div>
+            
+            <div class="input-group">
+              <input type="email" class="form-control" id="email" placeholder=" " required>
+              <label class="form-label" for="email">Email Address</label>
+            </div>
+            
+            <div class="input-group">
+              <input type="tel" class="form-control" id="phone" placeholder=" ">
+              <label class="form-label" for="phone">Phone Number (Optional)</label>
+            </div>
+            
+            <div class="input-group">
+              <input type="text" class="form-control" id="subject" placeholder=" " required>
+              <label class="form-label" for="subject">Inquiry Subject</label>
+            </div>
+            
+            <div class="input-group full-width">
+              <textarea class="form-control" id="message" placeholder=" " required></textarea>
+              <label class="form-label" for="message">Write Message Details...</label>
+            </div>
+          </div>
+          
+          <div style="text-align: center;">
+            <button type="submit" class="btn btn-primary" style="padding: 1.1rem 3rem;">Submit Message</button>
+          </div>
+        </form>
+      </div>
+    </div>
+  </section>
+
+  <!-- Section 4: Styled Map Section -->
+  <section class="map-section" style="position: relative;">
+    <a href="https://maps.google.com/?q=Salem,Tamil+Nadu,India" target="_blank" style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; z-index: 5; cursor: pointer;" aria-label="Open in Google Maps"></a>
+    <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3912.1798369324545!2d78.14088921480572!3d11.66212529172408!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x3babf038db4db1a7%3A0xe54d24177d6928e4!2sSalem%2C%20Tamil%20Nadu!5e0!3m2!1sen!2sin!4v1687500000000!5m2!1sen!2sin" allowfullscreen="" loading="lazy" style="pointer-events: none;"></iframe>
+  </section>
+
+  <!-- Section 5: FAQ Accordion -->
+  <section class="section">
+    <div class="container">
+      <div class="section-title-wrapper reveal-up">
+        <span class="section-subtitle">FAQ</span>
+        <h2 class="section-title">Common Questions</h2>
+      </div>
+      
+      <div class="faq-container reveal-up">
+        <!-- FAQ 1 -->
+        <div class="faq-item">
+          <div class="faq-header" onclick="toggleFaq(event)">
+            <h3 class="faq-question">What is your appointment cancellation policy?</h3>
+            <span class="faq-toggle-icon"><i class="fas fa-chevron-down"></i></span>
+          </div>
+          <div class="faq-answer">
+            We request that you reschedule or cancel your reservation at least 24 hours in advance. Cancellations made within 24 hours of the scheduled time may incur a fee of 50% of the service price.
+          </div>
+        </div>
+        
+        <!-- FAQ 2 -->
+        <div class="faq-item">
+          <div class="faq-header" onclick="toggleFaq(event)">
+            <h3 class="faq-question">Can I register duplicate emails or passwords?</h3>
+            <span class="faq-toggle-icon"><i class="fas fa-chevron-down"></i></span>
+          </div>
+          <div class="faq-answer">
+            Yes. To facilitate immediate testing and demo flows, our local authentication allows duplicate emails and passwords of any length. Your account data is securely stored inside your browser session storage.
+          </div>
+        </div>
+        
+        <!-- FAQ 3 -->
+        <div class="faq-item">
+          <div class="faq-header" onclick="toggleFaq(event)">
+            <h3 class="faq-question">Are your skincare products organic and chemical-free?</h3>
+            <span class="faq-toggle-icon"><i class="fas fa-chevron-down"></i></span>
+          </div>
+          <div class="faq-answer">
+            Absolutely. We utilize biodynamic active botanical products containing no silicones, formaldehydes, or parabens. We prioritize natural active ingredients that restore and feed the dermis.
+          </div>
+        </div>
+        
+        <!-- FAQ 4 -->
+        <div class="faq-item">
+          <div class="faq-header" onclick="toggleFaq(event)">
+            <h3 class="faq-question">How does your membership system work?</h3>
+            <span class="faq-toggle-icon"><i class="fas fa-chevron-down"></i></span>
+          </div>
+          <div class="faq-answer">
+            When you complete a booking in our Client Space, you earn loyalty points. Reaching 500 points elevates you to Gold status, and 1000 points to Platinum status, unlocking exclusive discounts and perks.
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Premium Footer -->
+  <footer>
+    <div class="container footer-grid">
+      <div class="footer-col">
+        <div class="footer-logo">
+          <img src="assets/Logo.webp" alt="Stackly Logo">
+        </div>
+        <p>Stackly offers premium international beauty styling, skincare, and restorative massage wellness services in a luxurious sanctuary.</p>
+        <div class="footer-socials">
+          <a href="404.html" class="social-icon"><i class="fab fa-instagram"></i></a>
+          <a href="404.html" class="social-icon"><i class="fab fa-facebook-f"></i></a>
+          <a href="404.html" class="social-icon"><i class="fab fa-pinterest-p"></i></a>
+          <a href="404.html" class="social-icon"><i class="fab fa-twitter"></i></a>
+        </div>
+      </div>
+      
+      <div class="footer-col">
+        <h4>Quick Links</h4>
+        <ul class="footer-links">
+          <li><a href="index.html">Home</a></li>
+          <li><a href="about.html">About Us</a></li>
+          <li><a href="services.html">Services</a></li>
+          <li><a href="gallery.html">Gallery</a></li>
+          <li><a href="contact.html">Contact Us</a></li>
+        </ul>
+      </div>
+      
+      <div class="footer-col">
+        <h4>Our Services</h4>
+        <ul class="footer-links">
+          <li><a href="404.html">Skincare Facials</a></li>
+          <li><a href="404.html">Body Massages</a></li>
+          <li><a href="404.html">Couture Hair Cuts</a></li>
+          <li><a href="404.html">Nail Care & Art</a></li>
+          <li><a href="404.html">Bridal Beauty Prep</a></li>
+        </ul>
+      </div>
+      
+      <div class="footer-col">
+        <h4>Stackly Salem</h4>
+        <p><i class="fas fa-map-marker-alt" style="color:var(--accent-gold); margin-right:8px;"></i> 12/B Luxury Plaza, Main Road, Salem, India</p>
+        <p><i class="fas fa-phone-alt" style="color:var(--accent-gold); margin-right:8px;"></i> +91 427 9876543</p>
+        <div class="footer-hours" style="margin-top: 1.5rem; border-top: 1px solid var(--border-light); padding-top: 1.5rem;">
+          <h5 style="color: var(--text-dark); font-size: 0.95rem; margin-bottom: 0.75rem; text-transform: uppercase; letter-spacing: 1px; font-family: var(--font-heading);">Opening Hours</h5>
+          <p style="margin-bottom: 0.5rem; font-size: 0.9rem;"><i class="far fa-clock" style="color: var(--accent-gold); margin-right: 8px;"></i> Mon - Fri: 9:00 AM - 8:00 PM</p>
+          <p style="margin-bottom: 0.5rem; font-size: 0.9rem;"><i class="far fa-clock" style="color: var(--accent-gold); margin-right: 8px;"></i> Sat - Sun: 9:00 AM - 9:00 PM</p>
+        </div>
+        <div class="footer-transit" style="margin-top: 1rem;">
+          <p style="font-size: 0.85rem; color: var(--text-muted); line-height: 1.4;"><i class="fas fa-parking" style="color: var(--accent-gold); margin-right: 8px;"></i> Valet parking available at entrance.</p>
+        </div>
+      </div>
+    </div>
+    
+    <div class="container footer-bottom">
+      <p>&copy; 2026 Stackly Beauty Salon & Spa. Powered by Stackly. All rights reserved.</p>
+      <p>Terms of Service &bull; Privacy Policy</p>
+    </div>
+  </footer>
+
+  <!-- GSAP Core & Plugins -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/ScrollTrigger.min.js"></script>
+  
+  <!-- Main Script -->
+  <script src="js/main.js"></script>
+  
+  <script>
+    // FAQ Accordion Trigger
+    function toggleFaq(e) {
+      const item = e.currentTarget.parentElement;
+      const isActive = item.classList.contains('active');
+      const allItems = document.querySelectorAll('.faq-item');
+      
+      allItems.forEach(i => i.classList.remove('active'));
+      
+      if (!isActive) {
+        item.classList.add('active');
+        const ans = item.querySelector('.faq-answer');
+        gsap.fromTo(ans, { opacity: 0, y: -5 }, { opacity: 1, y: 0, duration: 0.3 });
+      }
+    }
+
+    // Submit Contact Form Logic
+    function submitForm(e) {
+      e.preventDefault();
+      
+      showToast("Redirecting to inquiries page...", "success", 1200);
+      
+      setTimeout(() => {
+        window.location.href = '404.html';
+      }, 1200);
+    }
+  </script>
+</body>
+</html>

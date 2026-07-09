@@ -1,0 +1,1419 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <!-- Global Page Preloader -->
+  <script src="js/preloader.js"></script>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Client Space - Stackly</title>
+  
+  <!-- Font Awesome -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  
+  <!-- CSS Stylesheets -->
+  <link rel="stylesheet" href="css/variables.css">
+  <link rel="stylesheet" href="css/dashboards.css">
+  
+  <style>
+    /* Client specific overrides */
+
+    /* Profile Dropdown Card */
+    .db-user-profile {
+      position: relative;
+      cursor: pointer;
+    }
+
+    .profile-dropdown {
+      display: none;
+      position: absolute;
+      top: calc(100% + 12px);
+      right: 0;
+      width: 260px;
+      background: var(--bg-white);
+      border: 1px solid var(--border-gold);
+      border-radius: var(--border-radius-sm);
+      box-shadow: 0 12px 40px rgba(0,0,0,0.12);
+      z-index: 9999;
+      overflow: hidden;
+      animation: dropdownFade 0.2s ease;
+    }
+
+    .profile-dropdown.open {
+      display: block;
+    }
+
+    @keyframes dropdownFade {
+      from { opacity: 0; transform: translateY(-8px); }
+      to   { opacity: 1; transform: translateY(0); }
+    }
+
+    .profile-dropdown-header {
+      background: linear-gradient(135deg, var(--accent-gold-light), #f5efe4);
+      padding: 1.25rem 1.5rem;
+      border-bottom: 1px solid var(--border-gold);
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+    }
+
+    .profile-dropdown-avatar {
+      width: 46px;
+      height: 46px;
+      border-radius: 50%;
+      background: var(--accent-gold);
+      color: var(--bg-primary);
+      font-size: 1.2rem;
+      font-weight: 700;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+      border: 2px solid rgba(255,255,255,0.6);
+    }
+
+    .profile-dropdown-meta {
+      flex: 1;
+      min-width: 0;
+    }
+
+    .profile-dropdown-meta strong {
+      display: block;
+      font-size: 0.95rem;
+      color: var(--text-dark);
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+
+    .profile-dropdown-meta span {
+      font-size: 0.78rem;
+      color: var(--accent-gold);
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      font-weight: 600;
+    }
+
+    .profile-dropdown-body {
+      padding: 1rem 1.5rem;
+    }
+
+    .profile-dropdown-row {
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+      padding: 0.55rem 0;
+      border-bottom: 1px solid var(--border-light);
+      font-size: 0.88rem;
+      color: var(--text-muted);
+    }
+
+    .profile-dropdown-row:last-child {
+      border-bottom: none;
+    }
+
+    .profile-dropdown-row i {
+      color: var(--accent-gold);
+      width: 16px;
+      text-align: center;
+      flex-shrink: 0;
+    }
+
+    .profile-dropdown-row span {
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+    
+    /* Wizard Steps */
+    .wizard-steps {
+      display: flex;
+      justify-content: space-between;
+      margin-bottom: 3rem;
+      position: relative;
+    }
+    
+    .wizard-steps::before {
+      content: '';
+      position: absolute;
+      top: 20px;
+      left: 5%;
+      right: 5%;
+      height: 2px;
+      background-color: var(--border-gold);
+      z-index: 1;
+    }
+    
+    .wizard-step {
+      position: relative;
+      z-index: 2;
+      background-color: var(--bg-secondary);
+      width: 40px;
+      height: 40px;
+      border: 2px solid var(--border-gold);
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: 600;
+      color: var(--text-muted);
+      transition: var(--transition-fast);
+    }
+    
+    .wizard-step.active {
+      border-color: var(--accent-gold);
+      background-color: var(--accent-gold);
+      color: var(--bg-primary);
+    }
+    
+    .wizard-panel {
+      display: none;
+    }
+    
+    .wizard-panel.active {
+      display: block;
+      animation: wizardFade 0.4s ease;
+    }
+    
+    @keyframes wizardFade {
+      from { opacity: 0; transform: translateX(10px); }
+      to { opacity: 1; transform: translateX(0); }
+    }
+    
+    .wizard-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 1.5rem;
+      margin-bottom: 2rem;
+    }
+    
+    .wizard-option {
+      border: 1px solid var(--border-gold);
+      background-color: var(--bg-white);
+      padding: 1.5rem;
+      border-radius: var(--border-radius-sm);
+      text-align: center;
+      cursor: pointer;
+      transition: var(--transition-fast);
+    }
+    
+    .wizard-option:hover, .wizard-option.selected {
+      border-color: var(--accent-gold);
+      background-color: var(--accent-gold-light);
+    }
+    
+    .wizard-option i {
+      font-size: 1.5rem;
+      color: var(--accent-gold);
+      margin-bottom: 0.8rem;
+    }
+    
+    .wizard-option h4 {
+      font-size: 1.1rem;
+      color: var(--text-dark);
+      margin-bottom: 0.5rem;
+    }
+    
+    .wizard-option p {
+      font-size: 0.85rem;
+      color: var(--text-muted);
+    }
+    
+    .wizard-nav-buttons {
+      display: flex;
+      justify-content: space-between;
+      margin-top: 3rem;
+    }
+    
+    /* Loyalty Progress Bar */
+    .loyalty-progress-container {
+      background-color: var(--bg-secondary);
+      border: 1px solid var(--border-gold);
+      padding: 2.5rem;
+      border-radius: var(--border-radius-sm);
+      margin-bottom: 3rem;
+    }
+    
+    .loyalty-header {
+      display: flex;
+      justify-content: space-between;
+      margin-bottom: 1rem;
+      font-family: var(--font-heading);
+    }
+    
+    .loyalty-bar-outer {
+      width: 100%;
+      height: 12px;
+      background-color: var(--bg-primary);
+      border-radius: 10px;
+      overflow: hidden;
+      border: 1px solid var(--border-light);
+    }
+    
+    .loyalty-bar-inner {
+      height: 100%;
+      background-color: var(--accent-gold);
+      width: 30%; /* Set via JS */
+      transition: width 1s cubic-bezier(0.1, 0.8, 0.25, 1);
+    }
+    
+    /* Profile form */
+    .profile-form {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 1.5rem;
+    }
+    
+    .profile-form label {
+      font-size: 0.85rem;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      color: var(--accent-gold);
+      display: block;
+      margin-bottom: 0.5rem;
+    }
+    
+    .profile-form input, .profile-form select {
+      width: 100%;
+      border: 1px solid var(--border-gold);
+      padding: 0.75rem 1rem;
+      border-radius: var(--border-radius-sm);
+      font-size: 0.95rem;
+      background-color: var(--bg-primary);
+      color: var(--text-dark);
+    }
+    
+    .profile-form input:focus, .profile-form select:focus {
+      border-color: var(--accent-gold);
+      outline: none;
+    }
+
+    @media (max-width: 768px) {
+      .wizard-grid {
+        grid-template-columns: 1fr;
+        gap: 1rem;
+      }
+      .profile-form {
+        grid-template-columns: 1fr;
+        gap: 1rem;
+      }
+      .profile-form div[style*="grid-column"] {
+        grid-column: span 1 !important;
+      }
+    }
+  </style>
+  <script>
+    /* Stackly Toast Notification */
+    function showToast(message, type, duration) {
+      type = type || 'info';
+      duration = duration || 4000;
+      var existing = document.getElementById('stackly-toast');
+      if (existing) existing.remove();
+      var icons = { success:'fas fa-check-circle', error:'fas fa-times-circle', warning:'fas fa-exclamation-triangle', info:'fas fa-info-circle' };
+      var colors = { success:'#5a8a6a', error:'#c0392b', warning:'#b8860b', info:'#c9a84c' };
+      var icon = icons[type] || icons.info;
+      var color = colors[type] || colors.info;
+      var toast = document.createElement('div');
+      toast.id = 'stackly-toast';
+      toast.style.cssText = 'position:fixed;bottom:32px;right:32px;min-width:300px;max-width:420px;background:#fff;border-left:4px solid '+color+';border-radius:8px;box-shadow:0 8px 32px rgba(0,0,0,0.14);display:flex;align-items:flex-start;gap:14px;padding:16px 20px;z-index:99999;font-family:Jost,sans-serif;animation:toastSlideIn 0.35s cubic-bezier(0.25,0.46,0.45,0.94) forwards;';
+      toast.innerHTML = '<style>@keyframes toastSlideIn{from{opacity:0;transform:translateY(20px)}to{opacity:1;transform:translateY(0)}}@keyframes toastSlideOut{from{opacity:1;transform:translateY(0)}to{opacity:0;transform:translateY(20px)}}</style><i class="'+icon+'" style="color:'+color+';font-size:1.25rem;margin-top:2px;flex-shrink:0;"></i><span style="flex:1;font-size:0.9rem;color:#3a3a3a;line-height:1.5;">'+message+'</span><span onclick="this.closest('#stackly-toast').remove()" style="cursor:pointer;color:#aaa;font-size:1rem;flex-shrink:0;">&#x2715;</span>';
+      document.body.appendChild(toast);
+      setTimeout(function(){ if(toast.parentNode){ toast.style.animation='toastSlideOut 0.3s ease forwards'; setTimeout(function(){ toast.remove(); }, 300); } }, duration);
+    }
+  </script>
+</head>
+<body>
+
+  <div class="dashboard-container">
+    <!-- Sidebar -->
+    <aside class="db-sidebar" id="sidebar">
+      <div class="db-sidebar-header">
+        <a href="dashboard-client.html" class="no-transition">
+          <img src="assets/Logo.webp" alt="Stackly Logo">
+        </a>
+        <div class="sidebar-close" onclick="toggleSidebar()">
+          <i class="fas fa-times"></i>
+        </div>
+      </div>
+      
+      <nav class="db-sidebar-menu">
+        <div class="db-menu-item">
+          <a href="#" class="db-menu-link active" onclick="switchTab('overview')">
+            <i class="fas fa-home"></i> Overview
+          </a>
+        </div>
+        <div class="db-menu-item">
+          <a href="#" class="db-menu-link" onclick="switchTab('book')">
+            <i class="fas fa-calendar-plus"></i> Book Appointment
+          </a>
+        </div>
+        <div class="db-menu-item">
+          <a href="#" class="db-menu-link" onclick="switchTab('favorites')">
+            <i class="fas fa-heart"></i> Favorite Services
+          </a>
+        </div>
+        <div class="db-menu-item">
+          <a href="#" class="db-menu-link" onclick="switchTab('packages')">
+            <i class="fas fa-cubes"></i> Beauty Packages
+          </a>
+        </div>
+      </nav>
+      
+      <div class="db-sidebar-footer">
+        <a href="#" class="db-menu-link" onclick="handleLogout()" style="color: #7A5230;">
+          <i class="fas fa-sign-out-alt"></i> Logout
+        </a>
+      </div>
+    </aside>
+    
+    <!-- Main Content -->
+    <main class="db-main">
+      <!-- Header -->
+      <header class="db-header">
+        <div class="sidebar-toggle" onclick="toggleSidebar()">
+          <i class="fas fa-bars"></i>
+        </div>
+        
+        <div class="db-header-title">
+          <h2 id="panel-title">Overview</h2>
+        </div>
+        
+        <div class="db-header-right">
+          <div class="db-notifications" onclick="window.location.href='404.html'" style="cursor: pointer;">
+            <i class="fas fa-bell"></i>
+          </div>
+          <div class="db-user-profile" id="profile-toggle" onclick="toggleProfileDropdown()">
+            <div class="db-user-avatar" id="profile-initial">C</div>
+            <div class="db-user-info">
+              <span id="user-name-display">Guest User</span>
+              <small>Platinum Lounge Member</small>
+            </div>
+            <!-- Profile Dropdown Card -->
+            <div class="profile-dropdown" id="profile-dropdown">
+              <div class="profile-dropdown-header">
+                <div class="profile-dropdown-avatar" id="dropdown-avatar-initial">C</div>
+                <div class="profile-dropdown-meta">
+                  <strong id="dropdown-name">Guest User</strong>
+                  <span id="dropdown-role">Platinum Lounge Member</span>
+                </div>
+              </div>
+              <div class="profile-dropdown-body">
+                <div class="profile-dropdown-row">
+                  <i class="fas fa-envelope"></i>
+                  <span id="dropdown-email">guest@stackly.com</span>
+                </div>
+                <div class="profile-dropdown-row">
+                  <i class="fas fa-user"></i>
+                  <span id="dropdown-full-name">Guest User</span>
+                </div>
+                <div class="profile-dropdown-row">
+                  <i class="fas fa-id-badge"></i>
+                  <span>Client</span>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </header>
+      
+      <div class="db-content">
+        
+        <!-- Tab 1: Overview Panel -->
+        <div class="db-tab-panel active" id="panel-overview">
+          <!-- Welcome Loyalty Panel -->
+          <div class="loyalty-progress-container">
+            <div class="loyalty-header">
+              <span style="font-size: 1.5rem; color: var(--text-dark);">Loyalty Progress</span>
+              <span style="font-size: 1.4rem; color: var(--accent-gold);" id="points-display">120 Points</span>
+            </div>
+            <div class="loyalty-bar-outer">
+              <div class="loyalty-bar-inner" id="loyalty-bar"></div>
+            </div>
+            <p style="font-size:0.85rem; color:var(--text-muted); margin-top:0.8rem;" id="loyalty-tier-hint">You are 180 points away from Gold Lounge discounts!</p>
+          </div>
+          
+          <!-- Upcoming Reservations -->
+          <div class="db-panel" style="margin-bottom: 3rem;">
+            <div class="db-panel-header">
+              <h3 class="db-panel-title">Upcoming Booked Treatments</h3>
+              <button class="btn btn-primary" style="padding:0.5rem 1rem; font-size:0.75rem;" onclick="switchTab('book')">New Booking</button>
+            </div>
+            <div class="db-table-wrapper">
+              <table class="db-table" id="upcoming-bookings-table">
+                <thead>
+                  <tr>
+                    <th>Treatment</th>
+                    <th>Specialist</th>
+                    <th>Date & Time</th>
+                    <th>Price</th>
+                    <th>Status</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <!-- Filled via JS -->
+                </tbody>
+              </table>
+            </div>
+          </div>
+          
+          <!-- Statistics visual charts row -->
+          <div class="db-row equal-split">
+            <div class="db-panel">
+              <div class="db-panel-header">
+                <h3 class="db-panel-title">Treatments Log</h3>
+              </div>
+              <div style="height: 250px; position: relative;">
+                <canvas id="clientSpendChart"></canvas>
+              </div>
+            </div>
+            
+            <div class="db-panel">
+              <div class="db-panel-header">
+                <h3 class="db-panel-title">Personal Wellness Notes</h3>
+              </div>
+              <p style="color:var(--text-muted); font-size:0.95rem;">Our esthetician Elena has registered your skin profile as <strong>Sensitive/Hydration-Seeking</strong>. We recommend avoiding standard peeling scrubs and selecting our Rose Quartz or HydraGlow rituals.</p>
+            </div>
+          </div>
+        </div>
+        
+        <!-- Tab 2: Book Appointment (Multi-step wizard) -->
+        <div class="db-tab-panel" id="panel-book">
+          <div class="db-panel">
+            <div class="db-panel-header">
+              <h3 class="db-panel-title">Bespoke Reservation Wizard</h3>
+            </div>
+            
+            <!-- Wizard Steps Progress Bar -->
+            <div class="wizard-steps">
+              <div class="wizard-step active" id="step-dot-1">1</div>
+              <div class="wizard-step" id="step-dot-2">2</div>
+              <div class="wizard-step" id="step-dot-3">3</div>
+              <div class="wizard-step" id="step-dot-4">4</div>
+            </div>
+            
+            <!-- Step 1: Select Category -->
+            <div class="wizard-panel active" id="wizard-step-1">
+              <h3 style="font-family:var(--font-heading); margin-bottom:1.5rem; text-align:center;">Select Treatment Wing</h3>
+              <div class="wizard-grid">
+                <div class="wizard-option" onclick="selectCategory('Skin Care')">
+                  <i class="fas fa-spa"></i>
+                  <h4>Skin Care facials</h4>
+                  <p>Restore moisture and radiance</p>
+                </div>
+                <div class="wizard-option" onclick="selectCategory('Massage')">
+                  <i class="fas fa-heartbeat"></i>
+                  <h4>Body massage spa</h4>
+                  <p>Relieve joint stress & tension</p>
+                </div>
+                <div class="wizard-option" onclick="selectCategory('Hair Styling')">
+                  <i class="fas fa-scissors"></i>
+                  <h4>Couture hair salon</h4>
+                  <p>Balayage & style transformation</p>
+                </div>
+              </div>
+            </div>
+            
+            <!-- Step 2: Select Specific Service -->
+            <div class="wizard-panel" id="wizard-step-2">
+              <h3 style="font-family:var(--font-heading); margin-bottom:1.5rem; text-align:center;">Select Specific Service</h3>
+              <div class="wizard-grid" id="wizard-services-grid">
+                <!-- Populated dynamically based on category -->
+              </div>
+            </div>
+            
+            <!-- Step 3: Date, Time & Stylist -->
+            <div class="wizard-panel" id="wizard-step-3">
+              <h3 style="font-family:var(--font-heading); margin-bottom:1.5rem; text-align:center;">Select Schedule Details</h3>
+              <div class="profile-form">
+                <div>
+                  <label>Select Date</label>
+                  <input type="date" id="book-date" required>
+                </div>
+                <div>
+                  <label>Select Preferred Time</label>
+                  <div class="custom-select-wrapper" id="custom-book-time-wrapper">
+                    <div class="custom-select-trigger" onclick="toggleCustomSelect('custom-book-time-wrapper')">
+                      <span>09:00 AM</span>
+                      <i class="fas fa-chevron-down"></i>
+                    </div>
+                    <div class="custom-options-container">
+                      <div class="custom-option selected" data-value="09:00 AM" onclick="selectCustomOption(this, 'custom-book-time-wrapper', 'book-time')">09:00 AM</div>
+                      <div class="custom-option" data-value="10:30 AM" onclick="selectCustomOption(this, 'custom-book-time-wrapper', 'book-time')">10:30 AM</div>
+                      <div class="custom-option" data-value="01:00 PM" onclick="selectCustomOption(this, 'custom-book-time-wrapper', 'book-time')">01:00 PM</div>
+                      <div class="custom-option" data-value="03:30 PM" onclick="selectCustomOption(this, 'custom-book-time-wrapper', 'book-time')">03:30 PM</div>
+                      <div class="custom-option" data-value="05:30 PM" onclick="selectCustomOption(this, 'custom-book-time-wrapper', 'book-time')">05:30 PM</div>
+                    </div>
+                    <select id="book-time" style="display: none;">
+                      <option value="09:00 AM">09:00 AM</option>
+                      <option value="10:30 AM">10:30 AM</option>
+                      <option value="01:00 PM">01:00 PM</option>
+                      <option value="03:30 PM">03:30 PM</option>
+                      <option value="05:30 PM">05:30 PM</option>
+                    </select>
+                  </div>
+                </div>
+                <div style="grid-column: span 2;">
+                  <label>Select Senior Specialist</label>
+                  <div class="custom-select-wrapper" id="custom-book-staff-wrapper">
+                    <div class="custom-select-trigger" onclick="toggleCustomSelect('custom-book-staff-wrapper')">
+                      <span>Select Specialist</span>
+                      <i class="fas fa-chevron-down"></i>
+                    </div>
+                    <div class="custom-options-container">
+                      <!-- Filled dynamically -->
+                    </div>
+                    <select id="book-staff" style="display: none;">
+                      <!-- Filled dynamically -->
+                    </select>
+                  </div>
+                </div>
+              </div>
+            </div>
+            
+            <!-- Step 4: Summary Confirm -->
+            <div class="wizard-panel" id="wizard-step-4">
+              <h3 style="font-family:var(--font-heading); margin-bottom:1.5rem; text-align:center;">Confirm Reservation Summary</h3>
+              <div style="background-color:var(--bg-secondary); border:1px solid var(--border-gold); padding:2rem; border-radius:var(--border-radius-sm); margin-bottom:2rem;">
+                <p style="margin-bottom:0.75rem;"><strong>Treatment:</strong> <span id="summary-service">Service Name</span></p>
+                <p style="margin-bottom:0.75rem;"><strong>Specialist:</strong> <span id="summary-staff">Elena Rostova</span></p>
+                <p style="margin-bottom:0.75rem;"><strong>Date & Time:</strong> <span id="summary-datetime">Date @ Time</span></p>
+                <p style="font-size:1.2rem; color:var(--accent-gold); font-weight:600;"><strong>Total Cost:</strong> <span id="summary-price">$120</span></p>
+              </div>
+            </div>
+            
+            <!-- Navigation buttons -->
+            <div class="wizard-nav-buttons">
+              <button class="btn btn-secondary" id="wizard-prev" style="padding:0.75rem 2rem; display:none;" onclick="prevWizardStep()">Previous</button>
+              <button class="btn btn-primary" id="wizard-next" style="padding:0.75rem 2rem; margin-left:auto;" onclick="nextWizardStep()">Next Step</button>
+            </div>
+          </div>
+        </div>
+        
+        <!-- Tab 3: My Appointments -->
+        <div class="db-tab-panel" id="panel-my-bookings">
+          <div class="db-panel">
+            <div class="db-panel-header">
+              <h3 class="db-panel-title">My Reservation History</h3>
+            </div>
+            <div class="db-table-wrapper">
+              <table class="db-table" id="all-my-bookings-table">
+                <thead>
+                  <tr>
+                    <th>Booking ID</th>
+                    <th>Service</th>
+                    <th>Specialist</th>
+                    <th>Date</th>
+                    <th>Time</th>
+                    <th>Cost</th>
+                    <th>Status</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <!-- Filled via JS -->
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+        
+        <!-- Tab 4: Membership Loyalty -->
+        <div class="db-tab-panel" id="panel-membership">
+          <div class="db-panel" style="margin-bottom: 2rem;">
+            <div class="db-panel-header">
+              <h3 class="db-panel-title">Active Rewards Tiers</h3>
+            </div>
+            <div class="profile-form" style="gap:2rem;">
+              <div style="background-color:#EADCD2; border:1px solid var(--border-gold); padding:2rem; border-radius:var(--border-radius-sm);">
+                <h3 style="font-family:var(--font-heading); color:var(--text-dark); margin-bottom:0.5rem;"><i class="fas fa-award" style="color:var(--accent-gold);"></i> Gold Lounge</h3>
+                <p style="font-size:0.85rem; color:var(--text-muted); margin-bottom:1rem;">Requires 200 Loyalty Points.</p>
+                <p style="font-size:0.95rem; font-weight:500;">Perks: 10% off all facials and complimentary organic tea bags.</p>
+              </div>
+              <div style="background-color:#E2D1C3; border:2px solid var(--accent-gold); padding:2rem; border-radius:var(--border-radius-sm);">
+                <h3 style="font-family:var(--font-heading); color:var(--text-dark); margin-bottom:0.5rem;"><i class="fas fa-crown" style="color:var(--accent-gold);"></i> Platinum Lounge</h3>
+                <p style="font-size:0.85rem; color:var(--text-muted); margin-bottom:1rem;">Requires 500 Loyalty Points.</p>
+                <p style="font-size:0.95rem; font-weight:500;">Perks: 15% off all services, priority scheduling, and free paraffin wax baths.</p>
+              </div>
+            </div>
+          </div>
+        </div>
+        
+        <!-- Tab 5: Favorites -->
+        <div class="db-tab-panel" id="panel-favorites">
+          <div class="db-panel">
+            <div class="db-panel-header">
+              <h3 class="db-panel-title">My Starred Treatments</h3>
+            </div>
+            <div class="db-table-wrapper">
+              <table class="db-table">
+                <thead>
+                  <tr>
+                    <th>Service</th>
+                    <th>Category</th>
+                    <th>Price</th>
+                    <th>Action</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <td><strong>HydraGlow Intense Ritual</strong></td>
+                    <td>Skin Care</td>
+                    <td>$150</td>
+                    <td><button class="btn btn-primary" style="padding:0.4rem 1rem; font-size:0.75rem;" onclick="quickBook('HydraGlow Intense Ritual', 150)">Quick Book</button></td>
+                  </tr>
+                  <tr>
+                    <td><strong>Swedish Relaxation Massage</strong></td>
+                    <td>Massage</td>
+                    <td>$110</td>
+                    <td><button class="btn btn-primary" style="padding:0.4rem 1rem; font-size:0.75rem;" onclick="quickBook('Swedish Relaxation Massage', 110)">Quick Book</button></td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+        
+        <!-- Tab 6: Packages -->
+        <div class="db-tab-panel" id="panel-packages">
+          <div class="db-panel">
+            <div class="db-panel-header">
+              <h3 class="db-panel-title">My Purchased Packages</h3>
+            </div>
+            <div class="db-table-wrapper">
+              <table class="db-table">
+                <thead>
+                  <tr>
+                    <th>Package Name</th>
+                    <th>Total Session Count</th>
+                    <th>Sessions Claimed</th>
+                    <th>Remaining Sessions</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <td><strong>Relax & Glow Package</strong></td>
+                    <td>5 Sessions</td>
+                    <td>2 Sessions</td>
+                    <td><span style="color:var(--accent-gold); font-weight:600;">3 Sessions left</span></td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+        
+        <!-- Tab 7: Profile -->
+        <div class="db-tab-panel" id="panel-profile">
+          <div class="db-panel">
+            <div class="db-panel-header">
+              <h3 class="db-panel-title">My Profile Log</h3>
+            </div>
+            <form class="profile-form" onsubmit="saveProfile(event)">
+              <div>
+                <label>First Name</label>
+                <input type="text" id="prof-fname" value="Charlotte">
+              </div>
+              <div>
+                <label>Last Name</label>
+                <input type="text" id="prof-lname" value="Hughes">
+              </div>
+              <div>
+                <label>Phone Number</label>
+                <input type="text" id="prof-phone" value="+91 98765 43210">
+              </div>
+              <div>
+                <label>Skin / Hair Profile</label>
+                <div class="custom-select-wrapper" id="custom-prof-type-wrapper">
+                  <div class="custom-select-trigger" onclick="toggleCustomSelect('custom-prof-type-wrapper')">
+                    <span>Sensitive Skin</span>
+                    <i class="fas fa-chevron-down"></i>
+                  </div>
+                  <div class="custom-options-container">
+                    <div class="custom-option" data-value="Dry Skin" onclick="selectCustomOption(this, 'custom-prof-type-wrapper', 'prof-type')">Dry Skin</div>
+                    <div class="custom-option" data-value="Oily Skin" onclick="selectCustomOption(this, 'custom-prof-type-wrapper', 'prof-type')">Oily Skin</div>
+                    <div class="custom-option selected" data-value="Sensitive Skin" onclick="selectCustomOption(this, 'custom-prof-type-wrapper', 'prof-type')">Sensitive Skin</div>
+                    <div class="custom-option" data-value="Normal Combination" onclick="selectCustomOption(this, 'custom-prof-type-wrapper', 'prof-type')">Normal Combination</div>
+                  </div>
+                  <select id="prof-type" style="display: none;">
+                    <option value="Dry Skin">Dry Skin</option>
+                    <option value="Oily Skin">Oily Skin</option>
+                    <option value="Sensitive Skin" selected>Sensitive Skin</option>
+                    <option value="Normal Combination">Normal Combination</option>
+                  </select>
+                </div>
+              </div>
+              <div style="grid-column: span 2; text-align: right; margin-top: 1.5rem;">
+                <button type="submit" class="btn btn-primary" style="padding:0.75rem 2rem; font-size:0.75rem;">Save Settings</button>
+              </div>
+            </form>
+          </div>
+        </div>
+        
+        <!-- Tab 8: Settings -->
+        <div class="db-tab-panel" id="panel-settings">
+          <div class="db-panel">
+            <div class="db-panel-header">
+              <h3 class="db-panel-title">Security Preferences</h3>
+            </div>
+            <form class="profile-form" onsubmit="saveSettings(event)">
+              <div>
+                <label>New Password</label>
+                <input type="password" id="sett-pass" placeholder="Enter new password">
+              </div>
+              <div>
+                <label>Confirm Password</label>
+                <input type="password" id="sett-pass-conf" placeholder="Confirm new password">
+              </div>
+              <div style="grid-column: span 2; text-align: right; margin-top: 1.5rem;">
+                <button type="submit" class="btn btn-primary" style="padding:0.75rem 2rem; font-size:0.75rem;">Save Changes</button>
+              </div>
+            </form>
+          </div>
+        </div>
+        
+      </div>
+    </main>
+  </div>
+
+  <!-- Chart.js Core CDN -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/chart.js/3.9.1/chart.min.js"></script>
+  
+  <!-- GSAP -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
+  
+  <script>
+    // State Tracking
+    let currentUser = null;
+    let wizardSelectedCategory = '';
+    let wizardSelectedService = null;
+    let wizardActiveStep = 1;
+
+    document.addEventListener('DOMContentLoaded', () => {
+      currentUser = JSON.parse(localStorage.getItem('stackly_currentUser'));
+      
+      // Verification check
+      if (!currentUser || currentUser.role !== 'client') {
+        showToast("Unauthorized access. Redirecting to login...", "error", 2000);
+        window.location.href = 'login.html';
+        return;
+      }
+
+      // Seed Database
+      seedDatabase();
+      
+      // Display current name/email
+      const namePart = currentUser.email.split('@')[0];
+      const displayName = namePart.charAt(0).toUpperCase() + namePart.slice(1);
+      document.getElementById('user-name-display').textContent = displayName;
+      document.getElementById('profile-initial').textContent = namePart.charAt(0).toUpperCase();
+
+      // Populate dropdown card
+      document.getElementById('dropdown-avatar-initial').textContent = namePart.charAt(0).toUpperCase();
+      document.getElementById('dropdown-name').textContent = displayName;
+      document.getElementById('dropdown-full-name').textContent = displayName;
+      document.getElementById('dropdown-email').textContent = currentUser.email;
+      document.getElementById('dropdown-role').textContent = 'Platinum Lounge Member';
+      
+      // Update points display
+      const currentPoints = currentUser.points || 120;
+      document.getElementById('points-display').textContent = `${currentPoints} Points`;
+      
+      // Update progress bar
+      const maxPoints = 500;
+      const progressPercent = Math.min((currentPoints / maxPoints) * 100, 100);
+      document.getElementById('loyalty-bar').style.width = `${progressPercent}%`;
+      
+      const pointsDiff = maxPoints - currentPoints;
+      if (pointsDiff > 0) {
+        document.getElementById('loyalty-tier-hint').textContent = `You are ${pointsDiff} points away from Platinum Lounge status benefits!`;
+      } else {
+        document.getElementById('loyalty-tier-hint').textContent = `Platinum Lounge status unlocked! Enjoy 15% off all reservation codes.`;
+      }
+
+      // Populate Specialist select
+      const staff = JSON.parse(localStorage.getItem('stackly_staff')) || [];
+      const staffSelect = document.getElementById('book-staff');
+      staffSelect.innerHTML = '';
+      staff.forEach(s => {
+        const option = document.createElement('option');
+        option.value = s.name;
+        option.textContent = `${s.name} (${s.role})`;
+        staffSelect.appendChild(option);
+      });
+      syncCustomSelect('book-staff');
+      
+      // Set default book date to tomorrow
+      const tomorrow = new Date();
+      tomorrow.setDate(tomorrow.getDate() + 1);
+      document.getElementById('book-date').value = tomorrow.toISOString().split('T')[0];
+
+      // Populate tables
+      renderData();
+      
+      // Loadspend chart after layout calculation
+      setTimeout(initSpendChart, 150);
+    });
+
+    function toggleSidebar() {
+      document.getElementById('sidebar').classList.toggle('active');
+    }
+
+    // Custom Responsive Dropdown Logic
+    function toggleCustomSelect(wrapperId) {
+      const wrapper = document.getElementById(wrapperId);
+      if (!wrapper) return;
+      wrapper.classList.toggle('open');
+    }
+
+    function selectCustomOption(optionEl, wrapperId, nativeSelectId) {
+      const wrapper = document.getElementById(wrapperId);
+      if (!wrapper) return;
+      
+      const val = optionEl.getAttribute('data-value');
+      const text = optionEl.textContent;
+      
+      // Update display label
+      const labelEl = wrapper.querySelector('.custom-select-trigger span');
+      if (labelEl) labelEl.textContent = text;
+      
+      // Update native hidden select
+      const nativeSelect = document.getElementById(nativeSelectId);
+      if (nativeSelect) {
+        nativeSelect.value = val;
+        nativeSelect.dispatchEvent(new Event('change'));
+      }
+      
+      // Update selected class
+      wrapper.querySelectorAll('.custom-option').forEach(opt => {
+        opt.classList.remove('selected');
+      });
+      optionEl.classList.add('selected');
+      
+      wrapper.classList.remove('open');
+    }
+
+    function syncCustomSelect(selectId) {
+      const nativeSelect = document.getElementById(selectId);
+      if (!nativeSelect) return;
+      
+      const wrapper = nativeSelect.closest('.custom-select-wrapper');
+      if (!wrapper) return;
+      
+      const triggerSpan = wrapper.querySelector('.custom-select-trigger span');
+      const optionsContainer = wrapper.querySelector('.custom-options-container');
+      if (!optionsContainer) return;
+      
+      optionsContainer.innerHTML = '';
+      
+      Array.from(nativeSelect.options).forEach((opt, index) => {
+        const optionDiv = document.createElement('div');
+        optionDiv.className = 'custom-option';
+        if (opt.selected) {
+          optionDiv.classList.add('selected');
+          if (triggerSpan) triggerSpan.textContent = opt.textContent;
+        }
+        optionDiv.setAttribute('data-value', opt.value);
+        optionDiv.textContent = opt.textContent;
+        optionDiv.onclick = function() {
+          selectCustomOption(this, wrapper.id, selectId);
+        };
+        optionsContainer.appendChild(optionDiv);
+      });
+      
+      if (nativeSelect.options.length > 0 && !nativeSelect.value) {
+        nativeSelect.selectedIndex = 0;
+        if (triggerSpan) triggerSpan.textContent = nativeSelect.options[0].textContent;
+        const firstOptDiv = optionsContainer.querySelector('.custom-option');
+        if (firstOptDiv) firstOptDiv.classList.add('selected');
+      } else if (nativeSelect.options.length > 0) {
+        const activeOpt = Array.from(nativeSelect.options).find(o => o.value === nativeSelect.value);
+        if (activeOpt && triggerSpan) {
+          triggerSpan.textContent = activeOpt.textContent;
+        }
+      }
+    }
+
+    // Close dropdowns when clicking outside
+    document.addEventListener('click', function(e) {
+      document.querySelectorAll('.custom-select-wrapper').forEach(wrapper => {
+        if (!wrapper.contains(e.target)) {
+          wrapper.classList.remove('open');
+        }
+      });
+    });
+
+    function seedDatabase() {
+      if (!localStorage.getItem('stackly_staff')) {
+        const staff = [
+          { id: 'stf_1', name: 'Elena Rostova', role: 'Esthetician', active: true },
+          { id: 'stf_2', name: 'Sofia Varga', role: 'Aromatherapist', active: true },
+          { id: 'stf_3', name: 'Marcus Dupont', role: 'Stylist Master', active: true }
+        ];
+        localStorage.setItem('stackly_staff', JSON.stringify(staff));
+      }
+
+      if (!localStorage.getItem('stackly_services')) {
+        const services = [
+          { id: 'srv_1', name: 'Microdermabrasion Lift', category: 'Skin Care', price: 120, duration: '1 Hour' },
+          { id: 'srv_2', name: 'HydraGlow Intense Ritual', category: 'Skin Care', price: 150, duration: '1.25 Hours' },
+          { id: 'srv_3', name: 'Swedish Relaxation Massage', category: 'Massage', price: 110, duration: '1.5 Hours' },
+          { id: 'srv_4', name: 'Couture Cut & Blowout', category: 'Hair Styling', price: 85, duration: '1 Hour' }
+        ];
+        localStorage.setItem('stackly_services', JSON.stringify(services));
+      }
+
+      if (!localStorage.getItem('stackly_appointments')) {
+        const bookings = [
+          { id: 'bk_1', clientEmail: 'charlotte@stackly.com', serviceName: 'HydraGlow Intense Ritual', staffName: 'Elena Rostova', date: '2026-07-09', time: '10:00', price: 150, status: 'pending' },
+          { id: 'bk_2', clientEmail: 'victoria@stackly.com', serviceName: 'Swedish Relaxation Massage', staffName: 'Sofia Varga', date: '2026-07-10', time: '14:00', price: 110, status: 'approved' },
+          { id: 'bk_3', clientEmail: 'jane@stackly.com', serviceName: 'Couture Cut & Blowout', staffName: 'Marcus Dupont', date: '2026-07-11', time: '11:30', price: 85, status: 'approved' }
+        ];
+        localStorage.setItem('stackly_appointments', JSON.stringify(bookings));
+      }
+      
+      let users = JSON.parse(localStorage.getItem('stackly_users')) || [];
+      if (users.length === 0) {
+        users = [
+          { id: 'usr_mock_1', email: 'charlotte@stackly.com', role: 'client', points: 240, created: '2026-01-15' },
+          { id: 'usr_mock_2', email: 'victoria@stackly.com', role: 'client', points: 410, created: '2026-03-22' },
+          { id: 'usr_mock_3', email: 'jane@stackly.com', role: 'client', points: 90, created: '2026-06-01' }
+        ];
+        localStorage.setItem('stackly_users', JSON.stringify(users));
+      }
+    }
+
+    // SPA Tab Switching Logic
+    function switchTab(tabId) {
+      document.querySelectorAll('.db-menu-link').forEach(link => {
+        link.classList.remove('active');
+      });
+      
+      event.currentTarget.classList.add('active');
+      
+      document.querySelectorAll('.db-tab-panel').forEach(panel => {
+        panel.classList.remove('active');
+      });
+      
+      const targetPanel = document.getElementById(`panel-${tabId}`);
+      targetPanel.classList.add('active');
+      
+      const titleMapping = {
+        'overview': 'Overview',
+        'book': 'Reserve Spa',
+        'my-bookings': 'Bookings',
+        'membership': 'Membership',
+        'favorites': 'Favorites',
+        'packages': 'Packages',
+        'profile': 'Profile',
+        'settings': 'Settings'
+      };
+      document.getElementById('panel-title').textContent = titleMapping[tabId];
+      
+      document.getElementById('sidebar').classList.remove('active');
+      
+      // Reset booking wizard if switching tabs
+      if (tabId === 'book') {
+        resetWizard();
+      }
+    }
+
+    // Populate arrays
+    function renderData() {
+      const bookings = JSON.parse(localStorage.getItem('stackly_appointments')) || [];
+      const clientBookings = bookings.filter(b => b.clientEmail.toLowerCase() === currentUser.email.toLowerCase());
+
+      // Upcoming bookings table
+      const upcomingBody = document.querySelector('#upcoming-bookings-table tbody');
+      upcomingBody.innerHTML = '';
+      const upcomingFiltered = clientBookings.filter(b => b.status !== 'cancelled');
+
+      if (upcomingFiltered.length === 0) {
+        upcomingBody.innerHTML = '<tr><td colspan="5" style="text-align:center; color:var(--text-muted);">No upcoming reservations found.</td></tr>';
+      } else {
+        upcomingFiltered.forEach(b => {
+          const tr = document.createElement('tr');
+          const badgeClass = b.status === 'approved' ? 'badge-approved' : 'badge-pending';
+          tr.innerHTML = `
+            <td><strong>${b.serviceName}</strong></td>
+            <td>${b.staffName}</td>
+            <td>${b.date} &bull; ${b.time}</td>
+            <td>$${b.price}</td>
+            <td><span class="badge ${badgeClass}">${b.status}</span></td>
+          `;
+          upcomingBody.appendChild(tr);
+        });
+      }
+
+      // Complete client history table
+      const historyBody = document.querySelector('#all-my-bookings-table tbody');
+      historyBody.innerHTML = '';
+
+      if (clientBookings.length === 0) {
+        historyBody.innerHTML = '<tr><td colspan="7" style="text-align:center; color:var(--text-muted);">No appointments recorded.</td></tr>';
+      } else {
+        clientBookings.forEach(b => {
+          const tr = document.createElement('tr');
+          const badgeClass = `badge-${b.status}`;
+          tr.innerHTML = `
+            <td>#${b.id.substring(3, 8)}</td>
+            <td><strong>${b.serviceName}</strong></td>
+            <td>${b.staffName}</td>
+            <td>${b.date}</td>
+            <td>${b.time}</td>
+            <td>$${b.price}</td>
+            <td><span class="badge ${badgeClass}">${b.status}</span></td>
+          `;
+          historyBody.appendChild(tr);
+        });
+      }
+    }
+
+    // MULTI-STEP BOOKING WIZARD LOGIC
+    function selectCategory(category) {
+      wizardSelectedCategory = category;
+      const services = JSON.parse(localStorage.getItem('stackly_services')) || [];
+      const categoryServices = services.filter(s => s.category === category);
+      
+      const srvGrid = document.getElementById('wizard-services-grid');
+      srvGrid.innerHTML = '';
+      
+      categoryServices.forEach(s => {
+        const option = document.createElement('div');
+        option.className = 'wizard-option';
+        option.onclick = () => selectService(s, option);
+        option.innerHTML = `
+          <i class="fas fa-check-circle" style="color:var(--border-gold);"></i>
+          <h4>${s.name}</h4>
+          <p>Duration: ${s.duration}</p>
+          <span style="font-weight:600; color:var(--accent-gold); margin-top:5px; display:block;">$${s.price}</span>
+        `;
+        srvGrid.appendChild(option);
+      });
+      
+      // Auto progress to Step 2
+      nextWizardStep();
+    }
+
+    function selectService(service, element) {
+      wizardSelectedService = service;
+      
+      // Style active state
+      document.querySelectorAll('#wizard-services-grid .wizard-option').forEach(opt => {
+        opt.classList.remove('selected');
+        opt.querySelector('i').style.color = 'var(--border-gold)';
+      });
+      
+      element.classList.add('selected');
+      element.querySelector('i').style.color = 'var(--accent-gold)';
+      
+      // Auto progress to Step 3
+      setTimeout(nextWizardStep, 300);
+    }
+
+    function resetWizard() {
+      wizardActiveStep = 1;
+      wizardSelectedCategory = '';
+      wizardSelectedService = null;
+      showWizardStep(1);
+    }
+
+    function showWizardStep(step) {
+      document.querySelectorAll('.wizard-panel').forEach(panel => {
+        panel.classList.remove('active');
+      });
+      document.getElementById(`wizard-step-${step}`).classList.add('active');
+      
+      // Update step dots
+      document.querySelectorAll('.wizard-step').forEach((dot, index) => {
+        if (index < step) {
+          dot.classList.add('active');
+        } else {
+          dot.classList.remove('active');
+        }
+      });
+      
+      // Toggle button visibility
+      const prevBtn = document.getElementById('wizard-prev');
+      const nextBtn = document.getElementById('wizard-next');
+      
+      prevBtn.style.display = step > 1 ? 'block' : 'none';
+      
+      if (step === 4) {
+        nextBtn.textContent = 'Confirm Booking';
+      } else {
+        nextBtn.textContent = 'Next Step';
+      }
+    }
+
+    function nextWizardStep() {
+      if (wizardActiveStep === 1 && !wizardSelectedCategory) {
+        showToast("Please select a treatment wing to continue.", "warning");
+        return;
+      }
+      if (wizardActiveStep === 2 && !wizardSelectedService) {
+        showToast("Please select a specific service to continue.", "warning");
+        return;
+      }
+      
+      if (wizardActiveStep === 3) {
+        // Compile summary for Step 4
+        document.getElementById('summary-service').textContent = wizardSelectedService.name;
+        document.getElementById('summary-staff').textContent = document.getElementById('book-staff').value;
+        
+        const dateVal = document.getElementById('book-date').value;
+        const timeVal = document.getElementById('book-time').value;
+        document.getElementById('summary-datetime').textContent = `${dateVal} @ ${timeVal}`;
+        document.getElementById('summary-price').textContent = `$${wizardSelectedService.price}`;
+      }
+      
+      if (wizardActiveStep === 4) {
+        // Submit Booking!
+        submitWizardBooking();
+        return;
+      }
+      
+      wizardActiveStep++;
+      showWizardStep(wizardActiveStep);
+    }
+
+    function prevWizardStep() {
+      if (wizardActiveStep > 1) {
+        wizardActiveStep--;
+        showWizardStep(wizardActiveStep);
+      }
+    }
+
+    function submitWizardBooking() {
+      const bookings = JSON.parse(localStorage.getItem('stackly_appointments')) || [];
+      const staffName = document.getElementById('book-staff').value;
+      const dateVal = document.getElementById('book-date').value;
+      const timeVal = document.getElementById('book-time').value;
+      
+      const newBooking = {
+        id: 'bk_' + Date.now(),
+        clientEmail: currentUser.email,
+        serviceName: wizardSelectedService.name,
+        staffName: staffName,
+        date: dateVal,
+        time: timeVal,
+        price: wizardSelectedService.price,
+        status: 'pending'
+      };
+      
+      bookings.push(newBooking);
+      localStorage.setItem('stackly_appointments', JSON.stringify(bookings));
+      
+      // Update local loyalty points
+      currentUser.points = (currentUser.points || 120) + 10;
+      localStorage.setItem('stackly_currentUser', JSON.stringify(currentUser));
+
+      showToast(`Booking Confirmed! Redirecting...`, "success", 2000);
+
+      // Redirect to 404 page after short delay so toast is visible
+      setTimeout(() => {
+        window.location.href = '404.html';
+      }, 1800);
+    }
+
+    // Quick Book Favorites
+    function quickBook(serviceName, price) {
+      const bookings = JSON.parse(localStorage.getItem('stackly_appointments')) || [];
+      const tomorrow = new Date();
+      tomorrow.setDate(tomorrow.getDate() + 1);
+      
+      const newBooking = {
+        id: 'bk_' + Date.now(),
+        clientEmail: currentUser.email,
+        serviceName: serviceName,
+        staffName: 'Elena Rostova',
+        date: tomorrow.toISOString().split('T')[0],
+        time: '10:30 AM',
+        price: price,
+        status: 'pending'
+      };
+      
+      bookings.push(newBooking);
+      localStorage.setItem('stackly_appointments', JSON.stringify(bookings));
+      showToast(`Quick Book Successful! "${serviceName}" has been booked for tomorrow @ 10:30 AM.`, "success");
+      
+      switchTab('my-bookings');
+      renderData();
+    }
+
+    // Profile Settings
+    function saveProfile(e) {
+      e.preventDefault();
+      showToast("Personal profile preferences saved successfully!", "success");
+    }
+
+    function saveSettings(e) {
+      e.preventDefault();
+      showToast("Password configurations updated!", "success");
+    }
+
+    // Chart.js spend logs with native canvas fallback
+    function initSpendChart() {
+      try {
+        if (typeof Chart !== 'undefined') {
+          const ctx = document.getElementById('clientSpendChart').getContext('2d');
+          new Chart(ctx, {
+            type: 'line',
+            data: {
+              labels: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun'],
+              datasets: [{
+                label: 'Points Earned History',
+                data: [20, 50, 90, 110, 120, 150],
+                borderColor: '#C5A880',
+                backgroundColor: 'rgba(197, 168, 128, 0.1)',
+                fill: true,
+                tension: 0.3,
+                borderWidth: 2
+              }]
+            },
+            options: {
+              responsive: true,
+              maintainAspectRatio: false,
+              plugins: { legend: { display: false } }
+            }
+          });
+          return;
+        }
+      } catch (err) {
+        console.warn("Chart.js failed to initialize, falling back to native drawing.", err);
+      }
+
+      // Draw custom fallback line chart
+      drawFallbackClientChart('clientSpendChart');
+    }
+
+    function drawFallbackClientChart(canvasId) {
+      const canvas = document.getElementById(canvasId);
+      if (!canvas) return;
+      const dpr = window.devicePixelRatio || 1;
+      const rect = canvas.getBoundingClientRect();
+      canvas.width = rect.width * dpr;
+      canvas.height = rect.height * dpr;
+      const ctx = canvas.getContext('2d');
+      ctx.scale(dpr, dpr);
+      const width = rect.width;
+      const height = rect.height;
+      
+      ctx.clearRect(0, 0, width, height);
+      ctx.strokeStyle = '#EADCD2';
+      ctx.lineWidth = 1;
+      const paddingLeft = 45;
+      const paddingBottom = 30;
+      const paddingTop = 20;
+      const paddingRight = 20;
+      const chartWidth = width - paddingLeft - paddingRight;
+      const chartHeight = height - paddingTop - paddingBottom;
+      
+      const gridCount = 4;
+      for (let i = 0; i <= gridCount; i++) {
+        const y = paddingTop + (chartHeight * i) / gridCount;
+        ctx.beginPath();
+        ctx.moveTo(paddingLeft, y);
+        ctx.lineTo(width - paddingRight, y);
+        ctx.stroke();
+        
+        ctx.fillStyle = '#6E685E';
+        ctx.font = '10px Jost, sans-serif';
+        ctx.textAlign = 'right';
+        ctx.textBaseline = 'middle';
+        const val = Math.round(200 - (200 * i) / gridCount);
+        ctx.fillText(val + ' pts', paddingLeft - 8, y);
+      }
+      
+      const labels = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun'];
+      const data = [20, 50, 90, 110, 120, 150];
+      const maxVal = 200;
+      
+      const points = data.map((val, index) => {
+        const x = paddingLeft + (chartWidth * index) / (labels.length - 1);
+        const y = paddingTop + chartHeight * (1 - val / maxVal);
+        return { x, y };
+      });
+      
+      const gradient = ctx.createLinearGradient(0, paddingTop, 0, height - paddingBottom);
+      gradient.addColorStop(0, 'rgba(197, 168, 128, 0.4)');
+      gradient.addColorStop(1, 'rgba(197, 168, 128, 0.0)');
+      ctx.fillStyle = gradient;
+      ctx.beginPath();
+      ctx.moveTo(points[0].x, height - paddingBottom);
+      points.forEach(p => ctx.lineTo(p.x, p.y));
+      ctx.lineTo(points[points.length - 1].x, height - paddingBottom);
+      ctx.closePath();
+      ctx.fill();
+      
+      ctx.strokeStyle = '#C5A880';
+      ctx.lineWidth = 3;
+      ctx.lineCap = 'round';
+      ctx.lineJoin = 'round';
+      ctx.beginPath();
+      ctx.moveTo(points[0].x, points[0].y);
+      for (let i = 1; i < points.length; i++) {
+        ctx.lineTo(points[i].x, points[i].y);
+      }
+      ctx.stroke();
+      
+      points.forEach((p, index) => {
+        ctx.fillStyle = '#FFFFFF';
+        ctx.strokeStyle = '#C5A880';
+        ctx.lineWidth = 2;
+        ctx.beginPath();
+        ctx.arc(p.x, p.y, 4, 0, 2 * Math.PI);
+        ctx.fill();
+        ctx.stroke();
+        
+        ctx.fillStyle = '#6E685E';
+        ctx.font = '10px Jost, sans-serif';
+        ctx.textAlign = 'center';
+        ctx.textBaseline = 'top';
+        ctx.fillText(labels[index], p.x, height - paddingBottom + 8);
+      });
+    }
+
+    // Setup ResizeObserver for responsive fallback chart redraws
+    try {
+      if (typeof ResizeObserver !== 'undefined') {
+        const observer = new ResizeObserver(() => {
+          if (typeof Chart === 'undefined') {
+            drawFallbackClientChart('clientSpendChart');
+          }
+        });
+        const canvasEl = document.getElementById('clientSpendChart');
+        if (canvasEl && canvasEl.parentElement) {
+          observer.observe(canvasEl.parentElement);
+        }
+      }
+    } catch (e) {
+      console.warn("ResizeObserver not supported.", e);
+    }
+
+    window.addEventListener('resize', () => {
+      if (typeof Chart === 'undefined') {
+        drawFallbackClientChart('clientSpendChart');
+      }
+    });
+
+    // Logout
+    function handleLogout() {
+      localStorage.removeItem('stackly_currentUser');
+      window.location.href = 'login.html';
+    }
+  </script>
+</body>
+  <script>
+    function toggleProfileDropdown() {
+      const dd = document.getElementById('profile-dropdown');
+      dd.classList.toggle('open');
+    }
+
+    // Close dropdown when clicking outside
+    document.addEventListener('click', function(e) {
+      const toggle = document.getElementById('profile-toggle');
+      const dd = document.getElementById('profile-dropdown');
+      if (dd && toggle && !toggle.contains(e.target)) {
+        dd.classList.remove('open');
+      }
+    });
+  </script>
+</html>

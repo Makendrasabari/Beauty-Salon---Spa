@@ -1,0 +1,340 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <!-- Global Page Preloader -->
+  <script src="js/preloader.js"></script>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Login - Stackly Premium Beauty Salon & Spa</title>
+  
+  <!-- Font Awesome -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  
+  <!-- CSS Stylesheets -->
+  <link rel="stylesheet" href="css/variables.css">
+  <link rel="stylesheet" href="css/main.css">
+  
+  <style>
+    /* Auth Form Specific Styles */
+    .auth-wrapper {
+      height: 100vh;
+      overflow: hidden;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 1rem 1.5rem;
+      background: linear-gradient(rgba(253, 251, 247, 0.30), rgba(253, 251, 247, 0.30)), url('assets/hero_bg1.webp') no-repeat center center/cover;
+    }
+    
+    .back-link:hover {
+      color: var(--accent-gold) !important;
+      transform: translateX(-3px);
+    }
+    
+    .auth-card {
+      background-color: var(--bg-white);
+      border: 1px solid var(--border-gold);
+      border-radius: var(--border-radius-sm);
+      padding: 1.75rem 2.5rem;
+      width: 100%;
+      max-width: 460px;
+      box-shadow: var(--shadow-medium);
+      text-align: center;
+    }
+    
+    .auth-logo {
+      margin-bottom: -1rem;
+    }
+    
+    .auth-logo img {
+      height: 80px;
+      transform: translateY(-5px);
+      margin: 0 auto;
+    }
+    
+    .auth-title {
+      font-size: 1.8rem;
+      color: var(--text-dark);
+      margin-bottom: 0.25rem;
+    }
+    
+    .auth-subtitle {
+      color: var(--text-muted);
+      font-size: 0.9rem;
+      margin-bottom: 1.25rem;
+    }
+    
+    .auth-form {
+      text-align: left;
+    }
+    
+    .input-group {
+      position: relative;
+      margin-bottom: 1.25rem;
+    }
+    
+    .form-control {
+      width: 100%;
+      padding: 1rem 0;
+      border-bottom: 1px solid var(--border-gold);
+      font-size: 1rem;
+      background: transparent;
+      color: var(--text-dark);
+      transition: border-color 0.3s ease;
+    }
+    
+    .form-control:focus {
+      border-bottom-color: var(--accent-gold);
+    }
+    
+    .form-label {
+      position: absolute;
+      top: 1rem;
+      left: 0;
+      font-size: 0.95rem;
+      color: var(--text-muted);
+      pointer-events: none;
+      transition: all 0.3s ease;
+    }
+    
+    .form-control:focus ~ .form-label,
+    .form-control:not(:placeholder-shown) ~ .form-label {
+      top: -12px;
+      font-size: 0.75rem;
+      color: var(--accent-gold);
+      letter-spacing: 1px;
+      text-transform: uppercase;
+    }
+    
+    .forgot-link-wrapper {
+      text-align: right;
+      margin-top: -0.5rem;
+      margin-bottom: 1.25rem;
+    }
+    
+    .forgot-link {
+      font-size: 0.85rem;
+      color: var(--text-muted);
+      transition: var(--transition-fast);
+    }
+    
+    .forgot-link:hover {
+      color: var(--accent-gold);
+    }
+    
+    .auth-alert {
+      background-color: #F8D7DA;
+      border: 1px solid #F5C6CB;
+      color: #721C24;
+      padding: 0.8rem 1rem;
+      border-radius: var(--border-radius-sm);
+      margin-bottom: 2rem;
+      font-size: 0.9rem;
+      display: none;
+      text-align: center;
+    }
+    
+    .auth-footer-text {
+      margin-top: 1rem;
+      color: var(--text-muted);
+      font-size: 0.9rem;
+    }
+    
+    .auth-footer-text a {
+      color: var(--accent-gold);
+      font-weight: 600;
+    }
+    
+    .auth-footer-text a:hover {
+      color: var(--accent-gold-hover);
+    }
+    
+    /* Custom Segmented Role Switcher */
+    .role-switcher-group {
+      display: flex;
+      gap: 1rem;
+      margin-bottom: 1.25rem;
+    }
+    
+    .role-option {
+      flex: 1;
+      cursor: pointer;
+      position: relative;
+    }
+    
+    .role-box {
+      text-align: center;
+      padding: 0.8rem 0.5rem;
+      border: 1px solid var(--border-light);
+      border-radius: var(--border-radius-sm);
+      background: var(--bg-white);
+      color: var(--text-muted);
+      transition: var(--transition-fast);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 5px;
+      height: 72px;
+      box-sizing: border-box;
+    }
+    
+    .role-box i {
+      font-size: 1.15rem;
+    }
+    
+    .role-box span {
+      font-size: 0.85rem;
+      white-space: nowrap;
+    }
+    
+    .role-box:hover {
+      border-color: var(--accent-gold);
+      color: var(--accent-gold);
+    }
+    
+    .role-option input[type="radio"]:checked + .role-box {
+      background-color: var(--bg-primary) !important;
+      border-color: var(--accent-gold) !important;
+      color: var(--accent-gold) !important;
+      box-shadow: var(--shadow-soft) !important;
+      font-weight: 600 !important;
+    }
+  </style>
+</head>
+<body>
+
+  <div class="auth-wrapper">
+    <div class="auth-card scale-in">
+      <div class="back-home-container" style="text-align: center; margin-bottom: 1.5rem; margin-top: -1.5rem;">
+        <a href="index.html" class="back-link" style="color: var(--text-muted); text-decoration: none; font-size: 0.95rem; font-weight: 500; display: inline-flex; align-items: center; gap: 8px; transition: var(--transition-fast);">
+          <i class="fas fa-arrow-left"></i> Back to Home
+        </a>
+      </div>
+      <div class="auth-logo">
+        <a href="index.html" class="no-transition">
+          <img src="assets/Logo.webp" alt="Stackly Logo">
+        </a>
+      </div>
+      <div id="login-step">
+        <h2 class="auth-title">Welcome Back</h2>
+        <p class="auth-subtitle">Login to enter your wellness dashboard</p>
+        
+        <div class="auth-alert" id="auth-error">
+          Invalid credentials. Please try again.
+        </div>
+        
+        <form class="auth-form" id="loginForm" onsubmit="handleLogin(event)">
+          <!-- Custom Segmented Role Switcher -->
+          <div class="role-switcher-group">
+            <label class="role-option">
+              <input type="radio" name="role" value="client" style="display: none;">
+              <div class="role-box">
+                <i class="fas fa-spa"></i>
+                <span>Client</span>
+              </div>
+            </label>
+            <label class="role-option">
+              <input type="radio" name="role" value="manager" style="display: none;">
+              <div class="role-box">
+                <i class="fas fa-user-shield"></i>
+                <span>Spa Manager</span>
+              </div>
+            </label>
+          </div>
+
+          <!-- Email Input -->
+          <div class="input-group">
+            <input type="email" class="form-control" id="email" placeholder=" " required>
+            <label class="form-label" for="email">Email Address</label>
+          </div>
+          
+          <!-- Password Input -->
+          <div class="input-group">
+            <input type="password" class="form-control" id="password" placeholder=" " required>
+            <label class="form-label" for="password">Password</label>
+          </div>
+          
+          <div class="forgot-link-wrapper">
+            <a href="404.html" class="forgot-link no-transition">Forgot Password?</a>
+          </div>
+          
+          <button type="submit" class="btn btn-primary" style="width: 100%;">Log In</button>
+        </form>
+        
+        <p class="auth-footer-text">New to Stackly? <a href="register.html" class="no-transition">Register Here</a></p>
+      </div>
+    </div>
+  </div>
+
+  <!-- GSAP Core -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
+  
+  <script>
+    let loggedInEmail = '';
+
+    document.addEventListener('DOMContentLoaded', () => {
+      // Fade in card
+      gsap.fromTo('.auth-card', { opacity: 0, scale: 0.95 }, { opacity: 1, scale: 1, duration: 0.6, ease: 'power2.out' });
+      
+      // Auto-fill fields if redirected from Registration
+      const lastReg = JSON.parse(localStorage.getItem('stackly_last_reg'));
+      if (lastReg) {
+        document.getElementById('email').value = lastReg.email;
+        document.getElementById('password').value = lastReg.password;
+        
+        // Remove temporary data
+        localStorage.removeItem('stackly_last_reg');
+      }
+    });
+
+    function handleLogin(e) {
+      e.preventDefault();
+      
+      const email = document.getElementById('email').value.trim();
+      const password = document.getElementById('password').value;
+      const errorDiv = document.getElementById('auth-error');
+      const selectedRole = document.querySelector('input[name="role"]:checked');
+      if (!selectedRole) {
+        errorDiv.textContent = "Please select a portal role (Client or Spa Manager) to continue.";
+        errorDiv.style.display = "block";
+        return;
+      }
+      const role = selectedRole.value;
+      
+      // Enforce custom validations:
+      // - Email must end with @gmail.com
+      // - Password must contain at least 2 characters
+      if (!email || !email.toLowerCase().endsWith('@gmail.com')) {
+        errorDiv.textContent = "Please enter a valid Gmail address (ending in @gmail.com).";
+        errorDiv.style.display = "block";
+        return;
+      }
+      
+      if (!password || password.length < 2) {
+        errorDiv.textContent = "Password must be at least 2 characters.";
+        errorDiv.style.display = "block";
+        return;
+      }
+      
+      errorDiv.style.display = "none";
+      
+      // Mock currentUser object for state matching dashboard auth checks
+      const user = {
+        id: role === 'manager' ? 'mgr_' + Date.now() : 'cli_' + Date.now(),
+        email: email,
+        role: role,
+        points: role === 'client' ? 120 : 0
+      };
+      
+      localStorage.setItem('stackly_currentUser', JSON.stringify(user));
+      
+      if (role === 'manager') {
+        window.location.href = 'dashboard-manager.html';
+      } else {
+        window.location.href = 'dashboard-client.html';
+      }
+    }
+  </script>
+</body>
+</html>

@@ -1,0 +1,292 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <!-- Global Page Preloader -->
+  <script src="js/preloader.js"></script>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Register - Stackly Premium Beauty Salon & Spa</title>
+  
+  <!-- Font Awesome -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  
+  <!-- CSS Stylesheets -->
+  <link rel="stylesheet" href="css/variables.css">
+  <link rel="stylesheet" href="css/main.css">
+  
+  <style>
+    /* Auth Form Specific Styles */
+    .auth-wrapper {
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 3rem 1.5rem;
+      background: linear-gradient(rgba(253, 251, 247, 0.9), rgba(253, 251, 247, 0.9)), url('assets/hero_bg1.webp') no-repeat center center/cover;
+    }
+    
+    .back-link:hover {
+      color: var(--accent-gold) !important;
+      transform: translateX(-3px);
+    }
+    
+    .auth-card {
+      background-color: var(--bg-white);
+      border: 1px solid var(--border-gold);
+      border-radius: var(--border-radius-sm);
+      padding: 3.5rem 3rem;
+      width: 100%;
+      max-width: 500px;
+      box-shadow: var(--shadow-medium);
+      text-align: center;
+    }
+    
+    .auth-logo {
+      margin-bottom: -1.25rem;
+    }
+    
+    .auth-logo img {
+      height: 100px;
+      transform: translateY(-7px);
+      margin: 0 auto;
+    }
+    
+    .auth-title {
+      font-size: 2.2rem;
+      color: var(--text-dark);
+      margin-bottom: 0.5rem;
+    }
+    
+    .auth-subtitle {
+      color: var(--text-muted);
+      font-size: 0.95rem;
+      margin-bottom: 2.5rem;
+    }
+    
+    .auth-form {
+      text-align: left;
+    }
+    
+    .input-group {
+      position: relative;
+      margin-bottom: 2rem;
+    }
+    
+    .form-control {
+      width: 100%;
+      padding: 1rem 0;
+      border-bottom: 1px solid var(--border-gold);
+      font-size: 1rem;
+      background: transparent;
+      color: var(--text-dark);
+      transition: border-color 0.3s ease;
+    }
+    
+    .form-control:focus {
+      border-bottom-color: var(--accent-gold);
+    }
+    
+    .form-label {
+      position: absolute;
+      top: 1rem;
+      left: 0;
+      font-size: 0.95rem;
+      color: var(--text-muted);
+      pointer-events: none;
+      transition: all 0.3s ease;
+    }
+    
+    .form-control:focus ~ .form-label,
+    .form-control:not(:placeholder-shown) ~ .form-label {
+      top: -12px;
+      font-size: 0.75rem;
+      color: var(--accent-gold);
+      letter-spacing: 1px;
+      text-transform: uppercase;
+    }
+    
+    .role-select-wrapper {
+      margin-bottom: 2rem;
+    }
+    
+    .role-label {
+      font-size: 0.8rem;
+      color: var(--accent-gold);
+      letter-spacing: 1px;
+      text-transform: uppercase;
+      display: block;
+      margin-bottom: 0.8rem;
+      font-weight: 500;
+    }
+    
+    .role-options {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 1rem;
+    }
+    
+    .role-option {
+      position: relative;
+    }
+    
+    .role-option input {
+      position: absolute;
+      opacity: 0;
+      cursor: pointer;
+    }
+    
+    .role-box {
+      border: 1px solid var(--border-gold);
+      padding: 0.8rem 0.5rem;
+      border-radius: var(--border-radius-sm);
+      text-align: center;
+      cursor: pointer;
+      font-size: 0.85rem;
+      font-weight: 500;
+      color: var(--text-muted);
+      transition: var(--transition-fast);
+      display: block;
+      white-space: nowrap;
+    }
+    
+    .role-option input:checked ~ .role-box {
+      border-color: var(--accent-gold);
+      background-color: var(--accent-gold-light);
+      color: var(--accent-gold-hover);
+    }
+    
+    .auth-alert {
+      background-color: #F8D7DA;
+      border: 1px solid #F5C6CB;
+      color: #721C24;
+      padding: 0.8rem 1rem;
+      border-radius: var(--border-radius-sm);
+      margin-bottom: 2rem;
+      font-size: 0.9rem;
+      display: none;
+      text-align: center;
+    }
+    
+    .auth-footer-text {
+      margin-top: 2rem;
+      color: var(--text-muted);
+      font-size: 0.95rem;
+    }
+    
+    .auth-footer-text a {
+      color: var(--accent-gold);
+      font-weight: 600;
+    }
+    
+    .auth-footer-text a:hover {
+      color: var(--accent-gold-hover);
+    }
+  </style>
+</head>
+<body>
+
+  <div class="auth-wrapper">
+    <div class="auth-card scale-in">
+      <div class="back-home-container" style="text-align: center; margin-bottom: 1.5rem; margin-top: -1.5rem;">
+        <a href="index.html" class="back-link" style="color: var(--text-muted); text-decoration: none; font-size: 0.95rem; font-weight: 500; display: inline-flex; align-items: center; gap: 8px; transition: var(--transition-fast);">
+          <i class="fas fa-arrow-left"></i> Back to Home
+        </a>
+      </div>
+      <div class="auth-logo">
+        <a href="index.html" class="no-transition">
+          <img src="assets/Logo.webp" alt="Stackly Logo">
+        </a>
+      </div>
+      
+      <h2 class="auth-title">Create Account</h2>
+      <p class="auth-subtitle">Join us to book treatments and access dashboards</p>
+      
+      <div class="auth-alert" id="auth-error">
+        Registration error message details.
+      </div>
+      
+      <form class="auth-form" id="registerForm" onsubmit="handleRegister(event)">
+        <!-- Email Input -->
+        <div class="input-group">
+          <input type="email" class="form-control" id="email" placeholder=" " required>
+          <label class="form-label" for="email">Email Address</label>
+        </div>
+        
+        <!-- Password Input -->
+        <div class="input-group">
+          <input type="password" class="form-control" id="password" placeholder=" " required>
+          <label class="form-label" for="password">Password</label>
+        </div>
+        
+        <!-- Role Selection -->
+        <div class="role-select-wrapper">
+          <span class="role-label">Choose Account Space</span>
+          <div class="role-options">
+            <label class="role-option">
+              <input type="radio" name="role" value="client" checked>
+              <span class="role-box">Client Space</span>
+            </label>
+            <label class="role-option">
+              <input type="radio" name="role" value="manager">
+              <span class="role-box">Manager Space</span>
+            </label>
+          </div>
+        </div>
+        
+        <button type="submit" class="btn btn-primary" style="width: 100%;">Create Account</button>
+      </form>
+      
+      <p class="auth-footer-text">Already have an account? <a href="login.html" class="no-transition">Login Here</a></p>
+    </div>
+  </div>
+
+  <!-- GSAP Core -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
+  
+  <script>
+    document.addEventListener('DOMContentLoaded', () => {
+      // Fade in auth card
+      gsap.fromTo('.auth-card', { opacity: 0, scale: 0.95 }, { opacity: 1, scale: 1, duration: 0.6, ease: 'power2.out' });
+    });
+
+    function handleRegister(e) {
+      e.preventDefault();
+      
+      const email = document.getElementById('email').value.trim();
+      const password = document.getElementById('password').value;
+      const role = document.querySelector('input[name="role"]:checked').value;
+      const errorDiv = document.getElementById('auth-error');
+      
+      // Basic validations
+      if (!email || !password) {
+        errorDiv.textContent = "Please fill in all required fields.";
+        errorDiv.style.display = "block";
+        return;
+      }
+      
+      // Load current users from localStorage
+      let users = JSON.parse(localStorage.getItem('stackly_users')) || [];
+      
+      // Requirement: "Allow duplicate email registrations."
+      // So we do not check for existing email. We just append the user.
+      const newUser = {
+        id: 'usr_' + Date.now(),
+        email: email,
+        password: password,
+        role: role,
+        points: 120, // Default signup loyalty points
+        created: new Date().toISOString()
+      };
+      
+      users.push(newUser);
+      localStorage.setItem('stackly_users', JSON.stringify(users));
+      
+      // Save current registered user for easy login transfer
+      localStorage.setItem('stackly_last_reg', JSON.stringify({ email: email, password: password }));
+      
+      // Redirect to login page
+      window.location.href = 'login.html';
+    }
+  </script>
+</body>
+</html>

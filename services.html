@@ -1,0 +1,462 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <!-- Global Page Preloader -->
+  <script src="js/preloader.js"></script>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Services - Stackly Premium Beauty Salon & Spa</title>
+  <meta name="description" content="Browse our luxury treatment menu. From organic facials and hot stone massages to professional hair coloring and clinical nail art.">
+  
+  <!-- Font Awesome -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  
+  <!-- CSS Stylesheets -->
+  <link rel="stylesheet" href="css/variables.css">
+  <link rel="stylesheet" href="css/main.css">
+  
+  <style>
+    /* Services Page Specific Styles */
+    
+    /* Inner Hero */
+    .services-hero {
+      height: 60vh;
+      background: linear-gradient(rgba(42, 42, 42, 0.5), rgba(42, 42, 42, 0.5)), url('assets/hero_bg4.webp') no-repeat center center/cover;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      text-align: center;
+      color: #FFFFFF;
+    }
+    
+    .services-hero-content h1 {
+      font-size: 4rem;
+      font-weight: 300;
+      margin-bottom: 1rem;
+    }
+    
+    .services-breadcrumbs {
+      font-size: 0.9rem;
+      letter-spacing: 2px;
+      text-transform: uppercase;
+      color: var(--accent-gold);
+    }
+    
+    /* Alternating Services Layout */
+    .category-section {
+      padding: 6rem 0;
+    }
+    
+    .category-row {
+      display: grid;
+      grid-template-columns: 1fr 1.2fr;
+      gap: 5rem;
+      align-items: center;
+    }
+    
+    .category-row.reverse {
+      grid-template-columns: 1.2fr 1fr;
+    }
+    
+    .category-img-frame {
+      border: 1px solid var(--border-gold);
+      padding: 1rem;
+      border-radius: var(--border-radius-sm);
+    }
+    
+    .category-img-frame img {
+      width: 100%;
+      height: auto;
+      border-radius: var(--border-radius-sm);
+      transition: transform 0.5s ease;
+    }
+    
+    .category-img-frame:hover img {
+      transform: scale(1.03);
+    }
+    
+    .category-content h2 {
+      font-size: 2.5rem;
+      margin-bottom: 1rem;
+    }
+    
+    .category-content .section-subtitle {
+      text-align: left;
+      margin-bottom: 0.5rem;
+    }
+    
+    .category-desc {
+      color: var(--text-muted);
+      margin-bottom: 2.5rem;
+      font-size: 0.95rem;
+    }
+    
+    /* Price Listing Table */
+    .service-price-table {
+      margin-top: 1.5rem;
+    }
+    
+    .price-item {
+      display: flex;
+      justify-content: space-between;
+      align-items: baseline;
+      border-bottom: 1px dashed var(--border-light);
+      padding-bottom: 1rem;
+      margin-bottom: 1.2rem;
+    }
+    
+    .price-name {
+      font-size: 1.15rem;
+      font-family: var(--font-heading);
+      color: var(--text-dark);
+      font-weight: 500;
+    }
+    
+    .price-val {
+      font-size: 1.15rem;
+      font-family: var(--font-heading);
+      color: var(--accent-gold);
+      font-weight: 600;
+    }
+    
+    .price-desc {
+      font-size: 0.85rem;
+      color: var(--text-muted);
+      margin-top: 0.2rem;
+      margin-bottom: 0.5rem;
+    }
+    
+    /* Consultation Section */
+    .consultation-section {
+      background-color: var(--bg-secondary);
+      border-top: 1px solid var(--border-light);
+      border-bottom: 1px solid var(--border-light);
+      padding: 7rem 0;
+    }
+    
+    .consult-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 5rem;
+      align-items: center;
+    }
+    
+    .consult-content h2 {
+      font-size: 2.8rem;
+      margin-bottom: 1.5rem;
+    }
+    
+    .consult-content p {
+      color: var(--text-muted);
+      margin-bottom: 2rem;
+    }
+    
+    .consult-list li {
+      margin-bottom: 1rem;
+      display: flex;
+      align-items: flex-start;
+      gap: 15px;
+      font-size: 0.95rem;
+      color: var(--text-dark);
+    }
+    
+    .consult-list i {
+      color: var(--accent-gold);
+      font-size: 1rem;
+      margin-top: 3px;
+    }
+    
+    /* Responsiveness */
+    @media (max-width: 1024px) {
+      .category-row, .category-row.reverse, .consult-grid {
+        grid-template-columns: 1fr;
+        gap: 3.5rem;
+      }
+      .category-content, .consult-content {
+        text-align: center;
+      }
+      .category-content .section-subtitle, .consult-content .section-subtitle {
+        text-align: center;
+        display: block;
+        margin: 0 auto 0.5rem;
+      }
+      .consult-content h2 {
+        font-size: 2.2rem;
+      }
+    }
+    
+    @media (max-width: 768px) {
+      .consult-content h2 {
+        font-size: 2rem;
+      }
+    }
+    
+    @media (max-width: 480px) {
+      .services-hero-content h1 {
+        font-size: 2.2rem;
+      }
+      .category-content h2 {
+        font-size: 1.8rem;
+      }
+      .consult-content h2 {
+        font-size: 1.6rem;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Premium Header & Navbar -->
+  <header>
+    <div class="container navbar-container">
+      <a href="index.html" class="logo">
+        <img src="assets/Logo.webp" alt="Stackly Logo">
+      </a>
+      
+      <div class="hamburger">
+        <span></span>
+        <span></span>
+        <span></span>
+      </div>
+      
+      <nav class="nav-menu">
+        <li class="nav-item"><a href="index.html" class="nav-link">Home</a></li>
+        <li class="nav-item"><a href="about.html" class="nav-link">About</a></li>
+        <li class="nav-item"><a href="services.html" class="nav-link">Services</a></li>
+        <li class="nav-item"><a href="gallery.html" class="nav-link">Gallery</a></li>
+        <li class="nav-item"><a href="contact.html" class="nav-link">Contact</a></li>
+        <div class="nav-cta">
+          <a href="login.html" class="btn btn-primary" style="padding: 0.75rem 1.5rem; font-size: 0.75rem;">Login</a>
+        </div>
+      </nav>
+    </div>
+  </header>
+
+  <!-- Section 1: Services Hero Banner -->
+  <section class="services-hero">
+    <div class="services-hero-content reveal-fade">
+      <h1>Treatment Menu</h1>
+      <div class="services-breadcrumbs">
+        Services
+      </div>
+    </div>
+  </section>
+
+  <!-- Section 2: Skin Care Category -->
+  <section class="category-section">
+    <div class="container">
+      <div class="category-row">
+        <div class="category-img-frame scale-in">
+          <img src="assets/service_skin.webp" alt="Skincare treatments">
+        </div>
+        
+        <div class="category-content reveal-up">
+          <span class="section-subtitle">Therapies</span>
+          <h2>Aromatherapy Skincare & Facials</h2>
+          <p class="category-desc">A premium facial treatment at Stackly is a complete cellular rejuvenation. We assess your sebum, moisture, and pore depth to curate a bespoke botanical combination that feeds, tones, and heals your facial cells.</p>
+          
+          <div class="service-price-table">
+            <div class="price-item">
+              <div>
+                <span class="price-name">Microdermabrasion Lift</span>
+                <p class="price-desc">Deep physical exfoliating crystal ritual to erase dead surface cells.</p>
+              </div>
+              <span class="price-val">$120</span>
+            </div>
+            
+            <div class="price-item">
+              <div>
+                <span class="price-name">HydraGlow Intense Ritual</span>
+                <p class="price-desc">Infuses hyaluronic serums and vitamins directly under dermal layers.</p>
+              </div>
+              <span class="price-val">$150</span>
+            </div>
+            
+            <div class="price-item">
+              <div>
+                <span class="price-name">Organic Brightening Peel</span>
+                <p class="price-desc">Natural fruit-acid wash to eliminate dark spots and restore collagen production.</p>
+              </div>
+              <span class="price-val">$95</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Section 3: Massage Category (Reverse Layout) -->
+  <section class="category-section section-dark">
+    <div class="container">
+      <div class="category-row reverse">
+        <div class="category-content reveal-up">
+          <span class="section-subtitle">Restorative</span>
+          <h2>Body Massages & Spa Rituals</h2>
+          <p class="category-desc">Align your physical and spiritual energy. Our certified clinical massage therapists employ ancient Swedish, Tibetan hot-stone, and custom aromatherapy methods on heated memory foam beds to relieve physical fatigue.</p>
+          
+          <div class="service-price-table">
+            <div class="price-item">
+              <div>
+                <span class="price-name">Swedish Relaxation Massage</span>
+                <p class="price-desc">Gliding pressure patterns designed to stimulate lymphatic circulation.</p>
+              </div>
+              <span class="price-val">$110</span>
+            </div>
+            
+            <div class="price-item">
+              <div>
+                <span class="price-name">Deep Tissue alignment</span>
+                <p class="price-desc">Trigger-point pressure target blockages in myofascial tissue layers.</p>
+              </div>
+              <span class="price-val">$130</span>
+            </div>
+            
+            <div class="price-item">
+              <div>
+                <span class="price-name">Himalayan Salt Stone Ritual</span>
+                <p class="price-desc">Seventy trace minerals combined with active heat to soothe joint fatigue.</p>
+              </div>
+              <span class="price-val">$145</span>
+            </div>
+          </div>
+        </div>
+        
+        <div class="category-img-frame scale-in">
+          <img src="assets/service_body.webp" alt="Body Spa Massage">
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Section 4: Hair & Nails Category -->
+  <section class="category-section">
+    <div class="container">
+      <div class="category-row">
+        <div class="category-img-frame scale-in">
+          <img src="assets/service_hair.webp" alt="Hair Styling">
+        </div>
+        
+        <div class="category-content reveal-up">
+          <span class="section-subtitle">Artistry</span>
+          <h2>Couture Hair styling & Nail Art</h2>
+          <p class="category-desc">Transform your styling profile. From luxury balayage coloring to bespoke nail design, we utilize ammonia-free treatments and medical-grade manicuring systems to guarantee premium style without damage.</p>
+          
+          <div class="service-price-table">
+            <div class="price-item">
+              <div>
+                <span class="price-name">Couture Cut & Blowout</span>
+                <p class="price-desc">Includes head wash, botanical massage, signature cut and styled styling.</p>
+              </div>
+              <span class="price-val">$85</span>
+            </div>
+            
+            <div class="price-item">
+              <div>
+                <span class="price-name">Balayage Custom Coloring</span>
+                <p class="price-desc">Bespoke highlights formulated by our senior hair color directors.</p>
+              </div>
+              <span class="price-val">$190</span>
+            </div>
+            
+            <div class="price-item">
+              <div>
+                <span class="price-name">Luxury Gel Manicure</span>
+                <p class="price-desc">Nail clean, custom shape, long-wear gloss color and hand therapy.</p>
+              </div>
+              <span class="price-val">$55</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Section 5: Consultation Section -->
+  <section class="consultation-section">
+    <div class="container">
+      <div class="consult-grid">
+        <div class="consult-content reveal-up">
+          <span class="section-subtitle">Personal Diagnostic</span>
+          <h2>Complimentary Wellness Assessment</h2>
+          <p>Every premium treatment at Stackly begins with a detailed skin or hair mapping. This ensures that the essential oils, pressure methods, and cosmetic active ingredients align perfectly with your body's biochemical status.</p>
+          <ul class="consult-list">
+            <li><i class="fas fa-check-circle"></i> <span><strong>Skin Hydration Check:</strong> Scientific digital moisture logs to prevent epidermal irritation.</span></li>
+            <li><i class="fas fa-check-circle"></i> <span><strong>Aromatherapy Test:</strong> Inhalation logs to select therapeutic botanical oils.</span></li>
+            <li><i class="fas fa-check-circle"></i> <span><strong>Hair Porosity Scan:</strong> Formulate keratin and protein doses for long-lasting color.</span></li>
+          </ul>
+          <a href="404.html" class="btn btn-primary" style="margin-top: 2rem;">Book Assessment</a>
+        </div>
+        <div class="category-img-frame scale-in">
+          <img src="assets/service_nail.webp" alt="Nail Art Consultation">
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Premium Footer -->
+  <footer>
+    <div class="container footer-grid">
+      <div class="footer-col">
+        <div class="footer-logo">
+          <img src="assets/Logo.webp" alt="Stackly Logo">
+        </div>
+        <p>Stackly offers premium international beauty styling, skincare, and restorative massage wellness services in a luxurious sanctuary.</p>
+        <div class="footer-socials">
+          <a href="404.html" class="social-icon"><i class="fab fa-instagram"></i></a>
+          <a href="404.html" class="social-icon"><i class="fab fa-facebook-f"></i></a>
+          <a href="404.html" class="social-icon"><i class="fab fa-pinterest-p"></i></a>
+          <a href="404.html" class="social-icon"><i class="fab fa-twitter"></i></a>
+        </div>
+      </div>
+      
+      <div class="footer-col">
+        <h4>Quick Links</h4>
+        <ul class="footer-links">
+          <li><a href="index.html">Home</a></li>
+          <li><a href="about.html">About Us</a></li>
+          <li><a href="services.html">Services</a></li>
+          <li><a href="gallery.html">Gallery</a></li>
+          <li><a href="contact.html">Contact Us</a></li>
+        </ul>
+      </div>
+      
+      <div class="footer-col">
+        <h4>Our Services</h4>
+        <ul class="footer-links">
+          <li><a href="404.html">Skincare Facials</a></li>
+          <li><a href="404.html">Body Massages</a></li>
+          <li><a href="404.html">Couture Hair Cuts</a></li>
+          <li><a href="404.html">Nail Care & Art</a></li>
+          <li><a href="404.html">Bridal Beauty Prep</a></li>
+        </ul>
+      </div>
+      
+      <div class="footer-col">
+        <h4>Stackly Salem</h4>
+        <p><i class="fas fa-map-marker-alt" style="color:var(--accent-gold); margin-right:8px;"></i> 12/B Luxury Plaza, Main Road, Salem, India</p>
+        <p><i class="fas fa-phone-alt" style="color:var(--accent-gold); margin-right:8px;"></i> +91 427 9876543</p>
+        <div class="footer-hours" style="margin-top: 1.5rem; border-top: 1px solid var(--border-light); padding-top: 1.5rem;">
+          <h5 style="color: var(--text-dark); font-size: 0.95rem; margin-bottom: 0.75rem; text-transform: uppercase; letter-spacing: 1px; font-family: var(--font-heading);">Opening Hours</h5>
+          <p style="margin-bottom: 0.5rem; font-size: 0.9rem;"><i class="far fa-clock" style="color: var(--accent-gold); margin-right: 8px;"></i> Mon - Fri: 9:00 AM - 8:00 PM</p>
+          <p style="margin-bottom: 0.5rem; font-size: 0.9rem;"><i class="far fa-clock" style="color: var(--accent-gold); margin-right: 8px;"></i> Sat - Sun: 9:00 AM - 9:00 PM</p>
+        </div>
+        <div class="footer-transit" style="margin-top: 1rem;">
+          <p style="font-size: 0.85rem; color: var(--text-muted); line-height: 1.4;"><i class="fas fa-parking" style="color: var(--accent-gold); margin-right: 8px;"></i> Valet parking available at entrance.</p>
+        </div>
+      </div>
+    </div>
+    
+    <div class="container footer-bottom">
+      <p>&copy; 2026 Stackly Beauty Salon & Spa. Powered by Stackly. All rights reserved.</p>
+      <p>Terms of Service &bull; Privacy Policy</p>
+    </div>
+  </footer>
+
+  <!-- GSAP Core & Plugins -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/ScrollTrigger.min.js"></script>
+  
+  <!-- Main Script -->
+  <script src="js/main.js"></script>
+</body>
+</html>

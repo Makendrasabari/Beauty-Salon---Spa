@@ -1,0 +1,95 @@
+/* CSS Variables for Premium Beauty Salon & Spa */
+
+@import url('https://fonts.googleapis.com/css2?family=Jost:ital,wght@0,100..900;1,100..900&family=Playfair+Display:ital,wght@0,400..900;1,400..900&display=swap');
+
+:root {
+  /* Color System */
+  --bg-primary: #FDFBF7;       /* Soft linen warm background */
+  --bg-secondary: #FAF6F0;     /* Creamy warm secondary background */
+  --bg-white: #FFFFFF;         /* Crisp white for cards/elements */
+  --text-dark: #2A2A2A;        /* Luxurious off-black/slate */
+  --text-muted: #6E685E;       /* Soft warm grey for secondary text */
+  --accent-gold: #C5A880;      /* Signature gold */
+  --accent-gold-hover: #B89D73;/* Darker gold for hovers */
+  --accent-gold-light: #F4EFEB;/* Very soft gold tint */
+  --border-light: #EADCD2;      /* Elegant thin dividers */
+  --border-gold: #DCD0C0;      /* Slightly stronger divider */
+  --overlay-bg: rgba(42, 42, 42, 0.4); /* Elegant screen dim */
+  --glass-bg: rgba(255, 255, 255, 0.75);
+  --glass-border: rgba(197, 168, 128, 0.2);
+
+  /* Typography */
+  --font-heading: 'Playfair Display', serif;
+  --font-body: 'Jost', sans-serif;
+
+  /* Spacing */
+  --section-padding: 7rem 0;
+  --container-max-width: 1200px;
+  --border-radius-sm: 4px;
+  --border-radius-md: 12px;
+  --border-radius-lg: 24px;
+
+  /* Shadows */
+  --shadow-soft: 0 10px 30px rgba(197, 168, 128, 0.06);
+  --shadow-medium: 0 15px 40px rgba(197, 168, 128, 0.1);
+  --shadow-hard: 0 20px 50px rgba(42, 42, 42, 0.08);
+
+  /* Transitions */
+  --transition-smooth: all 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+  --transition-fast: all 0.2s ease;
+  --transition-bounce: all 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+}
+
+/* Base Reset & Reset Styles */
+*, *::before, *::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+html {
+  scroll-behavior: smooth;
+  font-size: 16px;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  overflow-x: hidden;
+}
+
+body {
+  background-color: var(--bg-primary);
+  color: var(--text-dark);
+  font-family: var(--font-body);
+  line-height: 1.6;
+  overflow-x: hidden;
+}
+
+h1, h2, h3, h4, h5, h6 {
+  font-family: var(--font-heading);
+  font-weight: 400;
+  line-height: 1.2;
+}
+
+a {
+  text-decoration: none;
+  color: inherit;
+  transition: var(--transition-fast);
+}
+
+ul {
+  list-style: none;
+}
+
+img {
+  max-width: 100%;
+  height: auto;
+  display: block;
+}
+
+button, input, select, textarea {
+  font-family: inherit;
+  font-size: inherit;
+  color: inherit;
+  background: none;
+  border: none;
+  outline: none;
+}
