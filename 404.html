@@ -1,8 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <!-- Global Page Preloader -->
-  <script src="js/preloader.js"></script>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>404 - Page Not Found | Stackly Premium Beauty Salon & Spa</title>
@@ -119,12 +117,25 @@
         <a href="index.html" class="btn btn-primary">
           <i class="fas fa-home" style="margin-right:8px;"></i> Go Home
         </a>
-        <button class="btn btn-secondary" onclick="window.history.back();">
+        <button class="btn btn-secondary" onclick="goBack()">
           <i class="fas fa-arrow-left" style="margin-right:8px;"></i> Go Back
         </button>
       </div>
     </div>
   </div>
+
+  <script>
+    function goBack() {
+      const ref = document.referrer;
+      // If referrer exists, is same origin, and is not another 404 page, go back
+      if (ref && ref.indexOf(window.location.hostname) !== -1 && ref.indexOf('404.html') === -1) {
+        window.history.back();
+      } else {
+        // No valid history — go home
+        window.location.href = 'index.html';
+      }
+    }
+  </script>
 
 </body>
 </html>
