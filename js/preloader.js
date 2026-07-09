@@ -69,6 +69,19 @@
   `;
   document.head.appendChild(style);
 
+  let preloaderRemoved = false;
+  function hidePreloader() {
+    if (preloaderRemoved) return;
+    preloaderRemoved = true;
+    const preloader = document.getElementById('stackly-preloader');
+    if (preloader) {
+      preloader.classList.add('fade-out');
+      setTimeout(() => {
+        preloader.remove();
+      }, 600);
+    }
+  }
+
   // 2. Inject HTML on DOMContentLoaded
   document.addEventListener('DOMContentLoaded', () => {
     const preloader = document.createElement('div');
@@ -84,20 +97,20 @@
     
     // Add to body as first child
     document.body.insertBefore(preloader, document.body.firstChild);
+
+    // Fail-safe: Automatically hide preloader after 1.5s in case load event is delayed/blocked
+    setTimeout(hidePreloader, 1500);
   });
 
-  // 3. Hide on window load with transition
+  // 3. Hide on window load
   window.addEventListener('load', () => {
-    const preloader = document.getElementById('stackly-preloader');
-    if (preloader) {
-      // Small artificial timeout to experience the preloader loading vibe
-      setTimeout(() => {
-        preloader.classList.add('fade-out');
-        // Remove from DOM after transition completes
-        setTimeout(() => {
-          preloader.remove();
-        }, 600);
-      }, 800);
+    setTimeout(hidePreloader, 300);
+  });
+
+  // 4. BFCache (Back-Forward Cache) Support
+  window.addEventListener('pageshow', (event) => {
+    if (event.persisted) {
+      hidePreloader();
     }
   });
 })();
